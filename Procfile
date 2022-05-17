@@ -1,0 +1,1 @@
+web: gunicorn pepitos_pizza.wsgi
