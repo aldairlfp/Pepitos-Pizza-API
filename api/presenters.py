@@ -1,4 +1,5 @@
-from .serializers import BaseOfferSerializer
+from telnetlib import STATUS
+from .serializers import BaseOfferSerializer, OfferSerializer
 from .utils import EntityDoesNotExist
 
 
@@ -17,4 +18,16 @@ class BaseOfferView(object):
             for element in base_offers:
                 body.append(BaseOfferSerializer.serialize(element))
             status = 200
+        return body, status
+
+class AllOffersView(object):
+    def __init__(self, get_all_offers_interactor):
+        self.get_all_offers_interactor = get_all_offers_interactor
+
+    def get(self):
+        offers = self.get_all_offers_interactor.execute()
+        body = []
+        for element in offers:
+            body.append(BaseOfferSerializer.serialize(element))
+        status = 200
         return body, status
