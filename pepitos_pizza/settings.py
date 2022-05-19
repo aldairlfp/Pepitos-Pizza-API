@@ -82,11 +82,11 @@ WSGI_APPLICATION = 'pepitos_pizza.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('NAME'),
-        'HOST': os.getenv('HOST'),
-        'PORT': os.getenv('PORT'),
-        'USER': os.getenv('USER'),
-        'PASSWORD': os.getenv('PASSWORD')
+        'NAME': 'des40a843qgf9v',
+        'HOST': 'ec2-54-86-224-85.compute-1.amazonaws.com',
+        'PORT': 5432,
+        'USER': 'uoqnynovfjobed',
+        'PASSWORD': '2e8faeac88de62d2438de14b6f48abac415926fdc2428e6854c7db36b76df793'
     }
 }
 
