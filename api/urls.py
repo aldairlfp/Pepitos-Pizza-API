@@ -5,5 +5,5 @@ from .factories import BaseOfferViewFactory
 app_name = "api"
 
 urlpatterns = [
-    path('base-offer', BaseOfferAPIView.as_view(view_factory=BaseOfferViewFactory))
+    path('baseoffer', BaseOfferAPIView.as_view(view_factory=BaseOfferViewFactory))
 ]
