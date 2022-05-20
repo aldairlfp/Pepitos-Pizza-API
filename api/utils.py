@@ -1,4 +1,5 @@
-from .entities import BaseOffer, Offer
+from .entities import *
+
 
 class EntityDoesNotExist(Exception):
     def __init__(self, *args: object) -> None:

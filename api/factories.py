@@ -20,7 +20,7 @@ class GetBaseOfferInteractorFactory(object):
 
     @staticmethod
     def get():
-        base_offer_repo = BaseOfferFactory.get()
+        base_offer_repo = BaseOfferRepoFactory.get()
         return GetBaseOffersInteractor(base_offer_repo)
 
 class BaseOfferViewFactory(object):

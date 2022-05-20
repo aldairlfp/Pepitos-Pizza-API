@@ -29,8 +29,8 @@ class BaseOffer(object):
 class Added(object):
     def __init__(self, id: int, name: str, available: bool):
         self._id = id
-        self.name = name
-        self.available = available
+        self._name = name
+        self._available = available
 
     @property
     def id(self):
@@ -64,7 +64,7 @@ class AmountAdded(object):
         self._id = id
         self._added = added
         self._amount = amount
-        self._price
+        self._price = price
 
     @property
     def id(self):
@@ -76,7 +76,7 @@ class AmountAdded(object):
 
     @property
     def amount(self):
-        return self._amount
+        return self._amount.amount
     
     @property
     def price(self):
@@ -87,7 +87,7 @@ class Offer(object):
     def __init__(self, id: int, base_offer: BaseOffer, amount_added: AmountAdded) -> None:
         self._id = id
         self._base_offer = base_offer
-        self._amount_added = AmountAdded
+        self._amount_added = amount_added
 
     @property
     def id(self):

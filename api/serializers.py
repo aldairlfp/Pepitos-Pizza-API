@@ -23,6 +23,14 @@ class AddedSerializer(object):
             'available': added.available
         }
 
+class AmountSerializer(object):
+
+    @staticmethod
+    def serialize(amount: Amount):
+        return {
+            'id': amount.id,
+            'amount': amount.amount
+        }
 
 class AmmountAddedSerializer(object):
 
@@ -31,7 +39,7 @@ class AmmountAddedSerializer(object):
         return {
             'id': amount_added.id,
             'name': amount_added.added.name,
-            'amunt': amount_added.amount.amount,
+            'amount': amount_added.amount,
             'available': amount_added.added.available,
             'price': amount_added.price
         }

@@ -1,7 +1,9 @@
+from multiprocessing.connection import wait
 from telnetlib import STATUS
+
+from api.entities import BaseOffer
 from .serializers import BaseOfferSerializer, OfferSerializer
 from .utils import EntityDoesNotExist
-
 
 class BaseOfferView(object):
     def __init__(self, get_base_offers_interactor) -> None:
@@ -28,6 +30,11 @@ class AllOffersView(object):
         offers = self.get_all_offers_interactor.execute()
         body = []
         for element in offers:
-            body.append(BaseOfferSerializer.serialize(element))
+            body.append(OfferSerializer.serialize(element))
         status = 200
+
+        import logging
+        logger = logging.getLogger("mylogger")
+        logger.info(body)
+
         return body, status

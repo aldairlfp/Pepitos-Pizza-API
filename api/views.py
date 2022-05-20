@@ -16,4 +16,4 @@ class AllOffersAPIView(APIView):
 
     def get(self, request, *args, **kwargs):
         body, status = self.view_factory.create().get(**kwargs)
-        return JsonResponse(json.dumps(body), status=status, content_type='application/json')
+        return HttpResponse(json.dumps(body), status=status, content_type='application/json')
