@@ -19,7 +19,7 @@ class BaseOfferDatabaseRepo(object):
 
 class OfferDatabaseRepo(object):
     def get_all_offers(self):
-        orm_offers = OfferORM.objects.all()
+        orm_offers = OfferORM.objects.all().order_by('base_offer__name')
         return self._decode_orm_offers(orm_offers)
 
     def _decode_orm_offers(self, orm_offers_query_set):

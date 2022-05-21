@@ -32,9 +32,4 @@ class AllOffersView(object):
         for element in offers:
             body.append(OfferSerializer.serialize(element))
         status = 200
-
-        import logging
-        logger = logging.getLogger("mylogger")
-        logger.info(body)
-
         return body, status

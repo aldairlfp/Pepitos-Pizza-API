@@ -11,3 +11,7 @@ class GetAllOffersInteractor(object):
 
     def execute(self):
         return self.offer_repo.get_all_offers()
+
+class PostOfferInteractor(object):
+    def __init__(self, offer_repo) -> None:
+        self._offer_repo = offer_repo

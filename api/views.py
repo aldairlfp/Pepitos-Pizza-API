@@ -1,7 +1,6 @@
 import json
 from rest_framework.views import APIView
-from django.http import JsonResponse, HttpResponse
-
+from django.http import HttpResponse
 
 class BaseOfferAPIView(APIView):
     view_factory = None

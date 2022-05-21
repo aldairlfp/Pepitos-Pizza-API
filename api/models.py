@@ -1,8 +1,5 @@
-from pyexpat import model
-from xml.etree.ElementInclude import default_loader
 from django.db import models
-from matplotlib.pyplot import cla
-from matplotlib.style import available
+from django.contrib.auth.models import User
 
 
 class BaseOffer(models.Model):
