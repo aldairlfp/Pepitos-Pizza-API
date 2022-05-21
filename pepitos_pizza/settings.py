@@ -83,8 +83,12 @@ WSGI_APPLICATION = 'pepitos_pizza.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3'
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'des40a843qgf9v',
+        'HOST': 'ec2-54-86-224-85.compute-1.amazonaws.com',
+        'PORT': 5432,
+        'USER': 'uoqnynovfjobed',
+        'PASSWORD': '2e8faeac88de62d2438de14b6f48abac415926fdc2428e6854c7db36b76df793'
     }
 }
 
