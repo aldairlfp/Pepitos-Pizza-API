@@ -1,13 +1,15 @@
 from .repositories import BaseOfferDatabaseRepo, OfferDatabaseRepo
 from .unit_repositories import BaseOfferRepo, OfferRepo
-from .interactors import GetBaseOffersInteractor, GetAllOffersInteractor
+from .interactors import GetBaseOffersInteractor, GetAllOffersInteractor, PostOfferInteractor
 from .presenters import BaseOfferView, AllOffersView
+
 
 class BaseOfferDatabaseRepoFactory(object):
 
     @staticmethod
     def get():
         return BaseOfferDatabaseRepo()
+
 
 class BaseOfferRepoFactory(object):
 
@@ -16,12 +18,14 @@ class BaseOfferRepoFactory(object):
         db_repo = BaseOfferDatabaseRepoFactory.get()
         return BaseOfferRepo(db_repo)
 
+
 class GetBaseOfferInteractorFactory(object):
 
     @staticmethod
     def get():
         base_offer_repo = BaseOfferRepoFactory.get()
         return GetBaseOffersInteractor(base_offer_repo)
+
 
 class BaseOfferViewFactory(object):
 
@@ -37,12 +41,14 @@ class OfferDatabaseRepoFactory(object):
     def get():
         return OfferDatabaseRepo()
 
+
 class OfferRepoFactory(object):
 
     @staticmethod
     def get():
         db_repo = OfferDatabaseRepoFactory.get()
         return OfferRepo(db_repo)
+
 
 class GetAllOffersInteractorFactory(object):
 
@@ -51,9 +57,23 @@ class GetAllOffersInteractorFactory(object):
         offer_repo = OfferRepoFactory.get()
         return GetAllOffersInteractor(offer_repo)
 
+
 class AllOffersViewFactory(object):
 
     @staticmethod
-    def create():
+    def create_get():
         get_all_offers_interactor = GetAllOffersInteractorFactory.get()
         return AllOffersView(get_all_offers_interactor)
+
+    @staticmethod
+    def create_post():
+        post_offer_interactor = PostOfferInteractorFactory().get()
+        return AllOffersView(post_offer_interactor)
+
+
+class PostOfferInteractorFactory(object):
+
+    @staticmethod
+    def get():
+        offer_repo = OfferRepoFactory().get()
+        return PostOfferInteractor(offer_repo)

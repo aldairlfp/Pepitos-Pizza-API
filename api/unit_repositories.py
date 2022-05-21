@@ -12,3 +12,6 @@ class OfferRepo(object):
 
     def get_all_offers(self):
         return self.__db_repo.get_all_offers()
+
+    def create_offer(self, id, base_offer, amount_added, price):
+        return self.__db_repo.create_offer(id, base_offer, amount_added, price)

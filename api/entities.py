@@ -1,28 +1,4 @@
 class BaseOffer(object):
-    def __init__(self, id: int, name: str, base_price: int, available: bool):
-        self._id = id
-        self._name = name
-        self._base_price = base_price
-        self._available = available
-
-    @property
-    def id(self):
-        return self._id
-
-    @property
-    def name(self):
-        return self._name
-
-    @property
-    def base_price(self):
-        return self._base_price
-
-    @property
-    def available(self):
-        return self._available
-
-
-class Added(object):
     def __init__(self, id: int, name: str, available: bool):
         self._id = id
         self._name = name
@@ -41,6 +17,20 @@ class Added(object):
         return self._available
 
 
+class Added(object):
+    def __init__(self, id: int, name: str):
+        self._id = id
+        self._name = name
+
+    @property
+    def id(self):
+        return self._id
+
+    @property
+    def name(self):
+        return self._name
+
+
 class Amount(object):
     def __init__(self, id: int, amount: int) -> None:
         self._id = id
@@ -56,11 +46,11 @@ class Amount(object):
 
 
 class AmountAdded(object):
-    def __init__(self, id: int, added: Added, amount: Amount, price: int) -> None:
+    def __init__(self, id: int, added: Added, amount: Amount, available:bool) -> None:
         self._id = id
         self._added = added
         self._amount = amount
-        self._price = price
+        self._available
 
     @property
     def id(self):
@@ -75,15 +65,16 @@ class AmountAdded(object):
         return self._amount.amount
 
     @property
-    def price(self):
-        return self._price
+    def available(self):
+        return self._available
 
 
 class Offer(object):
-    def __init__(self, id: int, base_offer: BaseOffer, amount_added: AmountAdded) -> None:
+    def __init__(self, id: int, base_offer: BaseOffer, amount_added: AmountAdded, price: int) -> None:
         self._id = id
         self._base_offer = base_offer
         self._amount_added = amount_added
+        self._price = price
 
     @property
     def id(self):
@@ -96,6 +87,10 @@ class Offer(object):
     @property
     def amount_added(self):
         return self._amount_added
+
+    @property
+    def price(self):
+        return self._price
 
 
 class Client(object):
@@ -209,14 +204,15 @@ class UpgradeStore(object):
     def products(self):
         return self._products
 
+
 class User(object):
-    def __init__(self, id:int, username:str, password:str, token:str, email:str=None) -> None:
+    def __init__(self, id: int, username: str, password: str, token: str, email: str = None) -> None:
         self._id = id
         self._username = username
         self._password = password
         self._token = token
         self._email = email
-    
+
     @property
     def id(self):
         return self._id
