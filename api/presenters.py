@@ -1,7 +1,5 @@
-from django.template import base
-from api.entities import BaseOffer
 from .serializers import BaseOfferSerializer, OfferSerializer
-from .utils import EntityDoesNotExist
+from .utils import EntityDoesNotExist, OfferAlreadyExist
 
 
 class BaseOfferView(object):
@@ -28,17 +26,22 @@ class AllOffersView(object):
         self._post_offer_interactor = post_offer_interactor
 
     def get(self):
-        offers = self.get_all_offers_interactor.execute()
+        offers = self._get_all_offers_interactor.execute()
         body = []
         for element in offers:
             body.append(OfferSerializer.serialize(element))
         status = 200
         return body, status
 
-    def post(self, id, base_offer, amount_added, price):
+    def post(self, offer):
         self._post_offer_interactor.set_params(
-            id, base_offer, amount_added, price)
-        offer = self._post_offer_interactor.execute()
-        body = offer
-        status = 200
+            offer['id'], offer['base_offer'], offer['amount_added'], offer['price'])
+        try:
+            offer = self._post_offer_interactor.execute()
+        except OfferAlreadyExist as e:
+            body = {'error': e.args[0]}
+            status = 400
+        else:
+            body = OfferSerializer.serialize(offer)
+            status = 200
         return body, status

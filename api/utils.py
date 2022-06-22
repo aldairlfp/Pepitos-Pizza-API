@@ -1,9 +1,8 @@
-from .entities import *
-
-
-class EntityDoesNotExist(Exception):
-    def __init__(self, *args: object) -> None:
-        super().__init__(*args)
+from entities.base_offer import *
+from entities.added import *
+from entities.amount import *
+from entities.amount_added import *
+from entities.offer import *
 
 
 @staticmethod
@@ -33,7 +32,7 @@ def decode_orm_amount(orm_amount):
 def decode_orm_amount_added(orm_amount_added):
     added = decode_orm_added(orm_amount_added.added)
     amount = decode_orm_amount(orm_amount_added.amount)
-    return AmountAdded(orm_amount_added.id, added, amount, orm_amount_added.price, orm_amount_added.available)
+    return AmountAdded(orm_amount_added.id, added, amount, orm_amount_added.available)
 
 
 @staticmethod
