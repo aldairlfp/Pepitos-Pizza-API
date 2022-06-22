@@ -1,5 +1,5 @@
 from .serializers import BaseOfferSerializer, OfferSerializer
-from .utils import EntityDoesNotExist, OfferAlreadyExist
+from .exception import EntityDoesNotExist, OfferAlreadyExist
 
 
 class BaseOfferView(object):

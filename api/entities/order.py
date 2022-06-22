@@ -1,5 +1,5 @@
 class Order(object):
-    def __init__(self, offer: Offer, client: Client, amount: int) -> None:
+    def __init__(self, offer, client, amount: int) -> None:
         self._offer = offer
         self._client = client
         self._amount = amount

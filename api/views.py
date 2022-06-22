@@ -19,7 +19,7 @@ class AllOffersAPIView(APIView):
     queryset = User.objects.none()
 
     def get(self, request):
-        poblate()
+        # poblate()
         body, status = self.view_factory.create().get()
         return HttpResponse(json.dumps(body), status=status, content_type='application/json')
 

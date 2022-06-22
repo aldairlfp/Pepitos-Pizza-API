@@ -1,8 +1,23 @@
 from django.forms import ValidationError
+
 from .models import BaseOffer as BaseOfferORM
 from .models import Offer as OfferORM
 from .models import AmountAdded as AmountAddedORM
-from .entities.entities import *
+from api.entities.added import *
+from api.entities.amount_added import *
+from api.entities.amount import *
+from api.entities.client import *
+from api.entities.complaint import *
+from api.entities.group import *
+from api.entities.offer import *
+from api.entities.order_list import *
+from api.entities.order import *
+from api.entities.permission import *
+from api.entities.product import *
+from api.entities.upgrade_store import *
+from api.entities.user import *
+from api.entities.base_offer import *
+from .exception import *
 from .utils import *
 
 
@@ -23,7 +38,7 @@ class BaseOfferDatabaseRepo(object):
 class OfferDatabaseRepo(object):
     def get_all_offers(self):
         orm_offers = OfferORM.objects.all().order_by('base_offer__name')
-        return decode_orm_offers(orm_offers)
+        return DecodeORM.decode_orm_offers(orm_offers)
 
     def create_offer(self, id, base_offer, amount_added, price):
         orm_base_offer = BaseOfferORM.objects.get(pk=base_offer)
@@ -36,4 +51,4 @@ class OfferDatabaseRepo(object):
             raise OfferAlreadyExist("The offer already exist.")
         else:
             orm_offer.save()
-        return decode_orm_offer(orm_offer)
+        return DecodeORM.decode_orm_offer(orm_offer)
