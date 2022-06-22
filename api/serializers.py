@@ -1,10 +1,7 @@
-from .entities import *
-
-
 class BaseOfferSerializer(object):
 
     @staticmethod
-    def serialize(base_offer: BaseOffer):
+    def serialize(base_offer):
         return {
             'id': base_offer.id,
             'name': base_offer.name,
@@ -15,7 +12,7 @@ class BaseOfferSerializer(object):
 class AddedSerializer(object):
 
     @staticmethod
-    def serialize(added: Added):
+    def serialize(added):
         return {
             'id': added.id,
             'name': added.name,
@@ -24,7 +21,7 @@ class AddedSerializer(object):
 class AmountSerializer(object):
 
     @staticmethod
-    def serialize(amount: Amount):
+    def serialize(amount):
         return {
             'id': amount.id,
             'amount': amount.amount
@@ -33,7 +30,7 @@ class AmountSerializer(object):
 class AmmountAddedSerializer(object):
 
     @staticmethod
-    def serialize(amount_added: AmountAdded):
+    def serialize(amount_added):
         return {
             'id': amount_added.id,
             'name': amount_added.added.name,
@@ -45,7 +42,7 @@ class AmmountAddedSerializer(object):
 class OfferSerializer(object):
 
     @staticmethod
-    def serialize(offer: Offer):
+    def serialize(offer):
         return {
             'id': offer.id,
             'base_offer': BaseOfferSerializer.serialize(offer.base_offer),

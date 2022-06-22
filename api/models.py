@@ -49,10 +49,11 @@ class AmountAdded(models.Model):
 
     def __str__(self) -> str:
         available = 'available ' if self.available else ' '
-        return self.id.__str__() + ' added: ' + self.added.__str__() + ', amount: ' + self.amount.__str__() + ', price: '+ self.price.__str__() + ' ,' + + available
+        return self.id.__str__() + ' added: ' + self.added.__str__() + ', amount: ' + self.amount.__str__() + ', price: ' + self.price.__str__() + ' ,' + + available
 
     class Meta:
         db_table = 'ammount_added'
+        unique_together = ('added', 'amount')
 
 
 class Offer(models.Model):
@@ -66,3 +67,4 @@ class Offer(models.Model):
 
     class Meta:
         db_table = 'offer'
+        unique_together = ('base_offer', 'amount_added')
