@@ -1,6 +1,4 @@
-from matplotlib.style import available
 from .models import *
-from django.contrib.auth.models import User, Group
 
 class Poblation(object):
 
