@@ -13,8 +13,8 @@ urlpatterns = [
     # path('base-offer', BaseOfferAPIView.as_view(view_factory=BaseOfferViewFactory)),
     path('offers', AllOffersAPIView.as_view(
         view_factory=AllOffersViewFactory)),
-    path('client'),
-    path('order'),
-    path('list/<str:pk>/'),
+    # path('client'),
+    # path('order'),
+    # path('list/<str:pk>/'),
     path('token-auth/', views.obtain_auth_token)
 ]

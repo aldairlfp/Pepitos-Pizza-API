@@ -1,5 +1,5 @@
 class Offer(object):
-    def __init__(self, id: int, base_offer: BaseOffer, amount_added: AmountAdded, price: int) -> None:
+    def __init__(self, id: int, base_offer, amount_added, price: int) -> None:
         self._id = id
         self._base_offer = base_offer
         self._amount_added = amount_added
