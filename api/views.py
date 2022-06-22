@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 from django.http import HttpResponse
 from django.contrib.auth.models import User
 
-from .poblate import poblate
+from .poblate import Poblation
 
 
 class BaseOfferAPIView(APIView):
@@ -19,7 +19,7 @@ class AllOffersAPIView(APIView):
     queryset = User.objects.none()
 
     def get(self, request):
-        # poblate()
+        Poblation.poblate()
         body, status = self.view_factory.create().get()
         return HttpResponse(json.dumps(body), status=status, content_type='application/json')
 

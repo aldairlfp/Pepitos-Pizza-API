@@ -10,7 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
-from lib2to3.pytree import Base
+
 import os
 from dotenv import load_dotenv
 from pathlib import Path
@@ -83,8 +83,12 @@ WSGI_APPLICATION = 'pepitos_pizza.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'dcrvtqu4uajsvi',
+        'HOST': 'ec2-52-71-23-11.compute-1.amazonaws.com',
+        'PORT': '5432',
+        'USER': 'xreizdliixjwmh',
+        'PASSWORD': '4e29331c416a234bddf4bf39a6d17dc916a3e1674d09c5805910c2218f9642a1'
     }
 }
 
