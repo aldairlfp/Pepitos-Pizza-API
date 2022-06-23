@@ -16,7 +16,7 @@ class AmountAdded(object):
     @property
     def amount(self):
         return self._amount.amount
-
+        
     @property
     def available(self):
         return self._available

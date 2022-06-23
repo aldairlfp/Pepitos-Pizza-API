@@ -35,7 +35,7 @@ class AmmountAddedSerializer(object):
             'id': amount_added.id,
             'name': amount_added.added.name,
             'amount': amount_added.amount,
-            'available': amount_added.available,
+            'available': amount_added.available
         }
 
 
@@ -47,5 +47,6 @@ class OfferSerializer(object):
             'id': offer.id,
             'base_offer': BaseOfferSerializer.serialize(offer.base_offer),
             'added': AmmountAddedSerializer.serialize(offer.amount_added),
-            'price': offer.price
+            'price': offer.price,
+            'available': offer.available
         }

@@ -26,17 +26,23 @@ class BaseOfferDatabaseRepo(object):
         orm_base_offers = BaseOfferORM.objects.all()
         return self._decode_orm_base_offers(orm_base_offers)
 
-    def _decode_orm_base_offers(self, orm_base_offers_query_set):
+    def get_base_offer(self, id):
+        orm_base_offer = BaseOfferORM.objects.get(pk=id)
+        return self._decode_orm_base_offer(orm_base_offer)
+
+    def _decode_orm_base_offers(self, orm_base_offers):
         base_offers_list = []
-        for element in orm_base_offers_query_set:
-            base_offer = BaseOffer(
-                element.id, element.name, element.base_price, element.available)
+        for element in orm_base_offers:
+            base_offer = self._decode_orm_base_offer(element)
             base_offers_list.append(base_offer)
         return base_offers_list
 
+    def _decode_orm_base_offer(self, orm_base_offer):
+        return BaseOffer(orm_base_offer.id, orm_base_offer.name, orm_base_offer.available)
+
 
 class OfferDatabaseRepo(object):
-    def get_all_offers(self):
+    def get_offers(self):
         orm_offers = OfferORM.objects.all().order_by('base_offer__name')
         return DecodeORM.decode_orm_offers(orm_offers)
 
@@ -45,7 +51,7 @@ class OfferDatabaseRepo(object):
         orm_amount_added = AmountAddedORM.objects.get(pk=amount_added)
         try:
             orm_offer = OfferORM(
-            id=id, base_offer=orm_base_offer, amount_added=orm_amount_added, price=price)
+                id=id, base_offer=orm_base_offer, amount_added=orm_amount_added, price=price)
             OfferORM.validate_unique(orm_offer)
         except ValidationError:
             raise OfferAlreadyExist("The offer already exist.")

@@ -9,6 +9,9 @@ admin.site.register(Added)
 admin.site.register(Amount)
 admin.site.register(AmountAdded)
 admin.site.register(Offer)
+admin.site.register(Client)
+admin.site.register(Order)
+admin.site.register(OrderList)
 
 TokenAdmin.raw_id_fields = ['user']
 

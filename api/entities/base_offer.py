@@ -1,5 +1,5 @@
 class BaseOffer(object):
-    def __init__(self, id: int, name: str, available: bool):
+    def __init__(self, id: int, name: str, available):
         self._id = id
         self._name = name
         self._available = available
@@ -11,7 +11,7 @@ class BaseOffer(object):
     @property
     def name(self):
         return self._name
-
+        
     @property
     def available(self):
         return self._available

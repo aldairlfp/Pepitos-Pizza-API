@@ -16,7 +16,7 @@ class DecodeORM(object):
     
     @staticmethod
     def decode_orm_base_offer(orm_base_offer):
-        return BaseOffer(orm_base_offer.id, orm_base_offer.name, orm_base_offer.available)
+        return BaseOffer(orm_base_offer.id, orm_base_offer.name)
     
     
     @staticmethod
@@ -33,13 +33,13 @@ class DecodeORM(object):
     def decode_orm_amount_added(orm_amount_added):
         added = DecodeORM.decode_orm_added(orm_amount_added.added)
         amount = DecodeORM.decode_orm_amount(orm_amount_added.amount)
-        return AmountAdded(orm_amount_added.id, added, amount, orm_amount_added.available)
+        return AmountAdded(orm_amount_added.id, added, amount)
     
     
     @staticmethod
     def decode_orm_offer(orm_offer):
         base_offer = DecodeORM.decode_orm_base_offer(orm_offer.base_offer)
         amount_added = DecodeORM.decode_orm_amount_added(orm_offer.amount_added)
-        offer = Offer(orm_offer.id, base_offer, amount_added, orm_offer.price)
+        offer = Offer(orm_offer.id, base_offer, amount_added, orm_offer.price, orm_offer.available)
         return offer
     

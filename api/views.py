@@ -1,34 +1,34 @@
 import json
-from rest_framework.views import APIView
-from django.http import HttpResponse
+
+from rest_framework.views import APIView, Response
 from django.contrib.auth.models import User
 
 from .poblate import Poblation
 
 
-class BaseOfferAPIView(APIView):
+# class BaseOfferAPIView(APIView):
+#     view_factory = None
+
+#     def get(self, request):
+#         body, status = self.view_factory.create().get()
+#         return Response(body, status=status)
+
+
+class APIView_Wrapper(APIView):
     view_factory = None
-
-    def get(self, request):
-        body, status = self.view_factory.create().get()
-        return HttpResponse(json.dumps(body), status=status, content_type='application/json')
-
-
-class AllOffersAPIView(APIView):
-    view_factory = None
-    queryset = User.objects.none()
+    queryset = User.objects.all()
 
     def get(self, request):
         Poblation.poblate()
         body, status = self.view_factory.create().get()
-        return HttpResponse(json.dumps(body), status=status, content_type='application/json')
+        return Response(body, status=status)
 
     def post(self, request):
         try:
-            offer = json.loads(request.body)
+            request_body = json.loads(request.body)
         except ValueError:
             body = {'error': 'The request body must be in json format.'}
-            return HttpResponse(json.dumps(body), status=400, content_type='application/json')
+            return Response(body, status=400)
         else:
-            body, status = self.view_factory.create().post(offer)
-            return HttpResponse(json.dumps(body), status=status, content_type='application/json')
+            body, status = self.view_factory.create().post(request_body)
+            return Response(body, status=status)
