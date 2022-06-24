@@ -6,8 +6,6 @@ from .models import *
 
 admin.site.register(BaseOffer)
 admin.site.register(Added)
-admin.site.register(Amount)
-admin.site.register(AmountAdded)
 admin.site.register(Offer)
 admin.site.register(Client)
 admin.site.register(Order)

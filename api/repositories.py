@@ -2,10 +2,8 @@ from django.forms import ValidationError
 
 from .models import BaseOffer as BaseOfferORM
 from .models import Offer as OfferORM
-from .models import AmountAdded as AmountAddedORM
+from .models import Added as AddedORM
 from api.entities.added import *
-from api.entities.amount_added import *
-from api.entities.amount import *
 from api.entities.client import *
 from api.entities.complaint import *
 from api.entities.group import *
@@ -48,7 +46,7 @@ class OfferDatabaseRepo(object):
 
     def create_offer(self, id, base_offer, amount_added, price):
         orm_base_offer = BaseOfferORM.objects.get(pk=base_offer)
-        orm_amount_added = AmountAddedORM.objects.get(pk=amount_added)
+        orm_amount_added = AddedORM.objects.get(pk=amount_added)
         try:
             orm_offer = OfferORM(
                 id=id, base_offer=orm_base_offer, amount_added=orm_amount_added, price=price)

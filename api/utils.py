@@ -1,7 +1,5 @@
 from api.entities.base_offer import *
 from api.entities.added import *
-from api.entities.amount import *
-from api.entities.amount_added import *
 from api.entities.offer import *
 
 
@@ -24,16 +22,16 @@ class DecodeORM(object):
         return Added(orm_added.id, orm_added.name)
     
     
-    @staticmethod
-    def decode_orm_amount(orm_amount):
-        return Amount(orm_amount.id, orm_amount.amount)
+    # @staticmethod
+    # def decode_orm_amount(orm_amount):
+    #     return Amount(orm_amount.id, orm_amount.amount)
     
     
-    @staticmethod
-    def decode_orm_amount_added(orm_amount_added):
-        added = DecodeORM.decode_orm_added(orm_amount_added.added)
-        amount = DecodeORM.decode_orm_amount(orm_amount_added.amount)
-        return AmountAdded(orm_amount_added.id, added, amount)
+    # @staticmethod
+    # def decode_orm_amount_added(orm_amount_added):
+    #     added = DecodeORM.decode_orm_added(orm_amount_added.added)
+    #     amount = DecodeORM.decode_orm_amount(orm_amount_added.amount)
+    #     return AmountAdded(orm_amount_added.id, added, amount)
     
     
     @staticmethod
