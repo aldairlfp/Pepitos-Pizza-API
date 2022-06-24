@@ -91,5 +91,3 @@ class Order(models.Model):
     class Meta:
         db_table = 'order'
         unique_together = ('client', 'offer')
-
-# making a method that returns the fibonacci sequence
