@@ -1,7 +1,7 @@
 from django.forms import ValidationError
 
 from .models import BaseOffer as BaseOfferORM
-from .models import Offer as OfferORM
+from .models import RequestedOffer as OfferORM
 from .models import Added as AddedORM
 from api.entities.added import *
 from api.entities.client import *
@@ -22,37 +22,34 @@ from .utils import *
 class BaseOfferDatabaseRepo(object):
     def get_base_offers(self):
         orm_base_offers = BaseOfferORM.objects.all()
-        return self._decode_orm_base_offers(orm_base_offers)
+        return BaseOfferDatabaseRepo.decode_orm_base_offers(orm_base_offers)
 
     def get_base_offer(self, id):
         orm_base_offer = BaseOfferORM.objects.get(pk=id)
-        return self._decode_orm_base_offer(orm_base_offer)
+        return BaseOfferDatabaseRepo.decode_orm_base_offer(orm_base_offer)
 
-    def _decode_orm_base_offers(self, orm_base_offers):
+    @staticmethod
+    def decode_orm_base_offers(orm_base_offers):
         base_offers_list = []
         for element in orm_base_offers:
-            base_offer = self._decode_orm_base_offer(element)
+            base_offer = BaseOfferDatabaseRepo.decode_orm_base_offer(element)
             base_offers_list.append(base_offer)
         return base_offers_list
 
-    def _decode_orm_base_offer(self, orm_base_offer):
-        return BaseOffer(orm_base_offer.id, orm_base_offer.name, orm_base_offer.available)
+    @staticmethod
+    def decode_orm_base_offer(orm_base_offer):
+        addeds = AddedDatabaseRepo.decode_orm_addeds(orm_base_offer.addeds.all())
+        return BaseOffer(orm_base_offer.id, orm_base_offer.name, orm_base_offer.available, orm_base_offer.price, addeds)
 
+class AddedDatabaseRepo(object):
+    @staticmethod
+    def decode_orm_addeds(orm_addeds):
+        addeds_list = []
+        for element in orm_addeds:
+            added = AddedDatabaseRepo.decode_orm_added(element)
+            addeds_list.append(added)
+        return addeds_list
 
-class OfferDatabaseRepo(object):
-    def get_offers(self):
-        orm_offers = OfferORM.objects.all().order_by('base_offer__name')
-        return DecodeORM.decode_orm_offers(orm_offers)
-
-    def create_offer(self, id, base_offer, amount_added, price):
-        orm_base_offer = BaseOfferORM.objects.get(pk=base_offer)
-        orm_amount_added = AddedORM.objects.get(pk=amount_added)
-        try:
-            orm_offer = OfferORM(
-                id=id, base_offer=orm_base_offer, amount_added=orm_amount_added, price=price)
-            OfferORM.validate_unique(orm_offer)
-        except ValidationError:
-            raise OfferAlreadyExist("The offer already exist.")
-        else:
-            orm_offer.save()
-        return DecodeORM.decode_orm_offer(orm_offer)
+    @staticmethod
+    def decode_orm_added(orm_added):
+        return Added(orm_added.id, orm_added.name, orm_added.available, orm_added.price)

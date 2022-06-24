@@ -14,6 +14,8 @@ class BaseOffer(models.Model):
     id = models.PositiveIntegerField(primary_key=True)
     name = models.CharField(max_length=100)
     available = models.BooleanField(default=True)
+    addeds = models.ManyToManyField('Added')
+    price = models.PositiveSmallIntegerField()
 
     def __str__(self) -> str:
         return 'id_BO: ' + self.id.__str__() + ', name_BO: ' + self.name
@@ -26,6 +28,7 @@ class Added(models.Model):
     id = models.PositiveIntegerField(primary_key=True)
     name = models.CharField(max_length=100)
     available = models.BooleanField(default=True)
+    price = models.PositiveSmallIntegerField()
 
     def __str__(self) -> str:
         return 'id_Added: ' + self.id.__str__() + ', name_Added: ' + self.name
@@ -33,19 +36,17 @@ class Added(models.Model):
     class Meta:
         db_table = 'added'
 
-class Offer(models.Model):
+class RequestedOffer(models.Model):
     id = models.PositiveIntegerField(primary_key=True)
     base_offer = models.ForeignKey(BaseOffer, on_delete=models.CASCADE)
     addeds = models.ManyToManyField(Added)
-    price = models.PositiveIntegerField()
-    available = models.BooleanField(default=True)
 
     def __str__(self) -> str:
         available = 'available ' if self.available else ' '
         return str(self.id) + ' ' + self.base_offer.__str__() + ' ' + self.addeds.__str__() + ' ' + self.price.__str__() + ' ' + available
 
     class Meta:
-        db_table = 'offer'
+        db_table = 'requested_offer'
 
 
 class Client(models.Model):
@@ -56,7 +57,7 @@ class Client(models.Model):
     address = models.CharField(max_length=100, validators=[
                                MinLengthValidator(1), MaxLengthValidator(100)], null=False)
     orders = models.ManyToManyField(
-        Offer, through='Order', through_fields=('client', 'offer'))
+        RequestedOffer, through='Order', through_fields=('client', 'offer'))
 
     class Meta:
         db_table = 'client'
@@ -83,7 +84,7 @@ class OrderList(models.Model):
 
 class Order(models.Model):
     client = models.ForeignKey(Client, on_delete=models.CASCADE)
-    offer = models.ForeignKey(Offer, on_delete=models.CASCADE)
+    offer = models.ForeignKey(RequestedOffer, on_delete=models.CASCADE)
     amount = models.PositiveIntegerField()
     order_list = models.ForeignKey(OrderList, on_delete=models.CASCADE)
 
