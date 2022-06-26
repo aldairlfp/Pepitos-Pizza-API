@@ -1,12 +1,12 @@
 class Order(object):
-    def __init__(self, offer, client, amount: int) -> None:
-        self._offer = offer
+    def __init__(self, requested_offer, client, amount: int) -> None:
+        self._requested_offer = requested_offer
         self._client = client
         self._amount = amount
 
     @property
-    def offer(self):
-        return self._offer
+    def requested_offer(self):
+        return self._requested_offer
 
     @property
     def client(self):

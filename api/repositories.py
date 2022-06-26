@@ -7,7 +7,7 @@ from api.entities.added import *
 from api.entities.client import *
 from api.entities.complaint import *
 from api.entities.group import *
-from api.entities.offer import *
+from api.entities.requested_offer import *
 from api.entities.order_list import *
 from api.entities.order import *
 from api.entities.permission import *

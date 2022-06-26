@@ -1,6 +1,6 @@
 from api.entities.base_offer import *
 from api.entities.added import *
-from api.entities.offer import *
+from api.entities.requested_offer import *
 
 
 class DecodeORM(object):        
