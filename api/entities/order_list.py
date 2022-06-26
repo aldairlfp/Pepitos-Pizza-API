@@ -1,9 +1,10 @@
 class OrderList(object):
-    def __init__(self, id: int, orders: list, date: str, state: str) -> None:
+    def __init__(self, id: int, client, orders: list, date: str, state: str) -> None:
         self._id = id
         self._date = date
         self._state = state
         self._orders = orders
+        self._client = client
 
     @property
     def id(self):
@@ -20,3 +21,7 @@ class OrderList(object):
     @property
     def orders(self):
         return self._orders
+        
+    @property
+    def client(self):
+        return self._client

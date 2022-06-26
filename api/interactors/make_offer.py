@@ -24,3 +24,5 @@ class RequestedOfferInteractor(object):
 
     def delete(self):
         self._requested_offer_repo.delete(self._by_id)
+        
+# TODO Create must return the created element

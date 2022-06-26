@@ -79,7 +79,6 @@ class OrderSerializer(object):
             return {
                 'id': order.id,
                 'requested_offer': RequestedOfferSerializer.serialize(order.requested_offer),
-                'client': ClientSerializer.serialize(order.client),
                 'amount': order.amount
             }
             
@@ -95,6 +94,7 @@ class OrderListSerializer(object):
         else:
             return {
                 'id': order_list.id,
+                'client': order_list.client,
                 'orders': OrderSerializer(order_list.orders, many=True),
                 'date': order_list.date,
                 'state': order_list.state
