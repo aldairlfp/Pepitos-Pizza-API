@@ -15,14 +15,12 @@ class RequestedOfferInteractor(object):
         return self._requested_offer_repo.get_element(by_id)
 
     def create(self):
-        self._requested_offer_repo.create(
+        return self._requested_offer_repo.create(
             self._id, self._base_offer, self._addeds)
 
     def update(self):
-        self._requested_offer_repo.update(
+        return self._requested_offer_repo.update(
             self._by_id, self._id, self._base_offer, self._addeds)
 
     def delete(self):
-        self._requested_offer_repo.delete(self._by_id)
-        
-# TODO Create must return the created element
+        return self._requested_offer_repo.delete(self._by_id)

@@ -31,23 +31,23 @@ class ManageOffersInteractor(object):
         return self._added_repo.get_element(self._by_id_added)
 
     def create_base_offer(self):
-        self._base_offer_repo.create(self._id_base_offer, self._name_base_offer,
+        return self._base_offer_repo.create(self._id_base_offer, self._name_base_offer,
                                      self._available_base_offer, self._price_base_offer,
                                      self._addeds_base_offer)
 
     def create_added(self):
-        self._added_repo.create(
+        return self._added_repo.create(
             self._id_added, self._name_added, self._available_added, self._price_added)
 
     def update_base_offer(self):
-        self._base_offer_repo.update(self._by_id_base_offer, self._id_base_offer, self._name_base_offer,
+        return self._base_offer_repo.update(self._by_id_base_offer, self._id_base_offer, self._name_base_offer,
                                      self._available_base_offer, self._price_base_offer, self._addeds_base_offer)
                                      
     def update_added(self):
-        self._added_repo.update(self._by_id_added, self._id_added, self._name_added, self._available_added, self._price_added)
+        return self._added_repo.update(self._by_id_added, self._id_added, self._name_added, self._available_added, self._price_added)
         
     def delete_base_offer(self):
-        self._base_offer_repo.delete(self._by_id_base_offer)
+        return self._base_offer_repo.delete(self._by_id_base_offer)
         
     def delete_added(self):
-        self._added_repo.delete(self._by_id_added)
+        return self._added_repo.delete(self._by_id_added)

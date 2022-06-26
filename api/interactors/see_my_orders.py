@@ -1,4 +1,4 @@
-from exception import ValidationError
+from ..exception import ValidationError
 
 class SeeMyOrdersInteractor(object):
     def __init__(self, order_list_repo) -> None:

@@ -15,10 +15,10 @@ class Order(object):
         return self._order_repo.get_element(self._by_id)
         
     def create(self):
-        self._order_repo.create(self._id, self._requested_offer, self._amount)
+        return self._order_repo.create(self._id, self._requested_offer, self._amount)
         
     def update(self):
-        self._order_repo.update(self._by_id, self._id, self._requested_offer, self._amount)
+        return self._order_repo.update(self._by_id, self._id, self._requested_offer, self._amount)
         
     def delete(self):
-        self._order_repo.delete(self, self._by_id)
+        return self._order_repo.delete(self, self._by_id)

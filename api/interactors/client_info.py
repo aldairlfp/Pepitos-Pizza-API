@@ -15,10 +15,10 @@ class ClientInfoInteractor(object):
         return self._client_repo.get_element(self._by_id)
         
     def create(self):
-        self._client_repo.create(self._ci, self._name, self._address)
+        return self._client_repo.create(self._ci, self._name, self._address)
         
     def update(self):
-        self._client_repo.update(self._by_id, self._ci, self._name, self._address)
+        return self._client_repo.update(self._by_id, self._ci, self._name, self._address)
         
     def delete(self):
-        self._client_repo.delete(self._by_id)
+        return self._client_repo.delete(self._by_id)

@@ -17,10 +17,10 @@ class MakeOrderInteractor(object):
         return self._order_list_repo.get_element(self._by_id)
 
     def create(self):
-        self._order_list_repo.create(self._id, self._client, self._orders, self._date, self._state)
+        return self._order_list_repo.create(self._id, self._client, self._orders, self._date, self._state)
         
     def update(self):
-        self._order_list_repo.update(self._by_id, self._id, self._client, self._orders, self._date, self._state)
+        return self._order_list_repo.update(self._by_id, self._id, self._client, self._orders, self._date, self._state)
         
     def delete(self):
-        self._order_list_repo.delete(self._by_id)
+        return self._order_list_repo.delete(self._by_id)

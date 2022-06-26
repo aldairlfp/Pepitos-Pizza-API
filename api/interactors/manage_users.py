@@ -16,12 +16,12 @@ class ManageUsersInteractor(object):
         return self._user_repo.get_element(self._by_id)
 
     def create(self):
-        self._user_repo.create(self._id, self._username,
+        return self._user_repo.create(self._id, self._username,
                                self._password, self._is_admin)
 
     def update(self):
-        self._user_repo.update(self._by_id, self._id,
+        return self._user_repo.update(self._by_id, self._id,
                                self._username, self._password, self._is_admin)
 
     def delete(self):
-        self._user_repo.delete(self._by_id)
+        return self._user_repo.delete(self._by_id)
