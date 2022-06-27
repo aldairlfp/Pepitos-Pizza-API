@@ -9,12 +9,6 @@ class MakeOrderInteractor(object):
         self._orders = orders
         self._date = date
         self._state = state
-        
-    def get_all(self):
-        return self._order_list_repo.get_all()
-    
-    def get_element(self):
-        return self._order_list_repo.get_element(self._by_id)
 
     def create(self):
         return self._order_list_repo.create(self._id, self._client, self._orders, self._date, self._state)

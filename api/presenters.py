@@ -36,7 +36,7 @@ class BaseOfferDetailView(object):
     def __init__(self, manage_offers_interactor) -> None:
         self._manage_offers_interactor = manage_offers_interactor
 
-    def get(self, by_id):
+    def get(self, request, by_id):
         self._manage_offers_interactor.set_params_base_offer(by_id=by_id)
         base_offer = self._manage_offers_interactor.get_element_base_offer()
         body = BaseOfferSerializer.serialize(base_offer)
@@ -294,4 +294,39 @@ class OrderView(object):
             status = 500
             return body, status
             
-# TODO finish implementation
+class OrderDetailView(object):
+    def __init__(self, see_my_order_interactor, update_state_interactor) -> None:
+        self._see_my_order_interactor = see_my_order_interactor
+        self._update_state_interactor = update_state_interactor
+        
+    def get(self, request, pk):
+        self._see_my_order_interactor.set_params(by_id=pk)
+        order_list = self._see_my_order_interactor.execute()
+        body = OrderListSerializer.serialize(order_list)
+        status = 200
+        return body, status
+        
+    def put(self, request_body, pk):
+        try:
+            self._see_my_order_interactor.set_params(by_id=pk)
+            order_list = self._see_my_order_interactor.execute()
+            
+            # id = order_list.id
+            # orders = order_list.orders
+            # client = order_list.client
+            # date = order_list.date
+            state = order_list.state
+            if request_body.key('state') != None:
+                state = request_body['state']
+            self._update_state_interactor.set_params(by_id=pk, state=state)
+            order_list = self._update_state_interactor.execute()
+            status = 200
+            return OrderListSerializer.serialize(order_list), status
+        except EntityDoesNotExist:
+            body = {'error': e.args[0]}
+            status = 400
+            return body, status
+        except Exception as e:
+            body = {'error': e.args[0]}
+            status = 500
+            return body, status
