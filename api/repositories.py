@@ -28,6 +28,27 @@ class BaseOfferDatabaseRepo(object):
         orm_base_offer = BaseOfferORM.objects.get(pk=id)
         return BaseOfferDatabaseRepo.decode_orm_base_offer(orm_base_offer)
 
+    def create(self, id, name, available, price, addeds):
+        orm_base_offer = BaseOfferORM(
+            id=id, name=name, price=price, available=available, addeds=addeds)
+        orm_base_offer.save()
+        return BaseOfferDatabaseRepo.decode_orm_base_offer(orm_base_offer)
+        
+    def update(self, by_id, id, name, available, price, addeds):
+        orm_base_offer = BaseOfferORM.objects.get(pk=by_id)
+        orm_base_offer.id = id
+        orm_base_offer.name = name
+        orm_base_offer.price = price
+        orm_base_offer.available = available
+        orm_base_offer.addeds = addeds
+        orm_base_offer.save()
+        return BaseOfferDatabaseRepo.decode_orm_base_offer(orm_base_offer)
+        
+    def delete(self, id):
+        orm_base_offer = BaseOfferORM.objects.get(pk=id)
+        orm_base_offer.delete()
+        return BaseOfferDatabaseRepo.decode_orm_base_offer(orm_base_offer)
+
     @staticmethod
     def decode_orm_base_offers(orm_base_offers):
         base_offers_list = []
@@ -38,8 +59,10 @@ class BaseOfferDatabaseRepo(object):
 
     @staticmethod
     def decode_orm_base_offer(orm_base_offer):
-        addeds = AddedDatabaseRepo.decode_orm_addeds(orm_base_offer.addeds.all())
+        addeds = AddedDatabaseRepo.decode_orm_addeds(
+            orm_base_offer.addeds.all())
         return BaseOffer(orm_base_offer.id, orm_base_offer.name, orm_base_offer.available, orm_base_offer.price, addeds)
+
 
 class AddedDatabaseRepo(object):
     @staticmethod
