@@ -22,7 +22,7 @@ class APIView_Wrapper(APIView):
     def get(self, *args, **kwargs):
         Poblation.poblate()
         body, status = self.view_factory.create().get(*args, **kwargs)
-        return HttpResponse(json.dumps(body), status=status, content_type='application/json')
+        return HttpResponse(json.dumps(body), status=status, content_type='application/json', header={ 'Access-Control-Allow-Origin': '*' })
 
     def post(self, request):
         try:
