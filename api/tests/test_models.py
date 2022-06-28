@@ -1,9 +1,13 @@
+from http import client
+from operator import methodcaller
 from pickle import TRUE
 from selectors import BaseSelector
 from django.test import TestCase
+from django.db import models
+from datetime import datetime, timedelta
 from matplotlib.style import available
 
-from ..models import Added, BaseOffer, RequestedOffer, Client
+from ..models import Added, BaseOffer, RequestedOffer, Client, Order, OrderList
 
 
 class BaseOfferTest(TestCase):
@@ -153,12 +157,76 @@ class ClientTest(TestCase):
         self.assertEqual(field_label, 'address')
 
     def test_name_max_length(self):
-        base_offer = BaseOffer.objects.get(id=1)
-        max_length = base_offer._meta.get_field('name').max_length
+        client = Client.objects.get(id=1)
+        max_length = client._meta.get_field('name').max_length
         self.assertEqual(max_length, 100)
 
     def test_address_max_length(self):
-        base_offer = BaseOffer.objects.get(id=1)
-        max_length = base_offer._meta.get_field('address').max_length
+        client = Client.objects.get(id=1)
+        max_length = client._meta.get_field('address').max_length
         self.assertEqual(max_length, 100)
 
+class OrderTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        ad1 = Added.objects.create(id = 1, name = "queso", price = 10)
+        ad2 = Added.objects.create(id = 2, available = False, name = "jamon", price = 15)
+        ad3 = Added.objects.create(id = 3, name = "cebolla", price = 7)
+
+        bo = BaseOffer.objects.create(id=1, name="espaguetti", price=10)
+        bo.addeds.set([ad1, ad2, ad3])
+       
+        ro = RequestedOffer.objects.create(id = 1, base_offer = bo)
+        ro.addeds.set([ad1, ad3])
+        
+        o1 = Order.objects.create(requested_offer = ro, amount = 1, order_list = 1)
+    
+    def test_requested_offer_label(self):
+        order = Order.objects.get(id=1)
+        field_label = order._meta.get_field('requested_offer').verbose_name
+        self.assertEqual(field_label, 'requested_offer')
+    
+    def test_amount_label(self):
+        order = Order.objects.get(id=1)
+        field_label = order._meta.get_field('amount').verbose_name
+        self.assertEqual(field_label, 'amount')
+    
+    def test_order_list_label(self):
+        order = Order.objects.get(id=1)
+        field_label = order._meta.get_field('oreder_list').verbose_name
+        self.assertEqual(field_label, 'order_list')
+    
+    
+    
+class OrderListTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        c1 = Client.objects.create(ci = 1, name = "Ramon", address = "Ninguna parte")
+        
+        date = models.DateTimeField(datetime.now())
+        ol1 = OrderList.objects.create(id=1, client=c1, date=date, state_order='Accepted')
+    
+    def test_id_label(self):
+        order_list = OrderList.objects.get(id=1)
+        field_label = order_list._meta.get_field('id').verbose_name
+        self.assertEqual(field_label, 'id')
+    
+    def test_client_label(self):
+        order_list = OrderList.objects.get(id=1)
+        field_label = order_list._meta.get_field('client').verbose_name
+        self.assertEqual(field_label, 'client')
+    
+    def test_date_label(self):
+        order_list = OrderList.objects.get(id=1)
+        field_label = order_list._meta.get_field('date').verbose_name
+        self.assertEqual(field_label, 'date')
+    
+    def test_state_order_label(self):
+        order_list = OrderList.objects.get(id=1)
+        field_label = order_list._meta.get_field('state_order').verbose_name
+        self.assertEqual(field_label, 'state_order')
+    
+    
+    
+        
+    
