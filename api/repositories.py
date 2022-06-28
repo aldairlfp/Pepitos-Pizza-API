@@ -34,6 +34,7 @@ class BaseOfferDatabaseRepo(object):
 
     def create(self, name, price, addeds):
         orm_base_offer = BaseOfferORM(name=name, price=price)
+        orm_base_offer.save()
         for element in addeds:
             added = AddedORM.objects.get(pk=element.id)
             orm_base_offer.addeds.add(added)            

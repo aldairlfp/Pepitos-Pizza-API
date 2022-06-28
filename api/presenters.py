@@ -216,10 +216,6 @@ class OrderListView(object):
     def post(self, request_body):
         try:
             error = {}
-            if request_body['id'] != None:
-                id_request = request_body['id']
-            else:
-                error['id'] = 'id is required'
             if request_body['client'] != None:
                 client_request = request_body['client']
             else:
@@ -255,18 +251,13 @@ class OrderListView(object):
 
             self._client_info_interactor.set_params(client.ci)
             client = self._client_info_interactor.get_element()
-            self._make_order_interactor.set_params(
-                id=id_request, client=client, date=date_request)
+            self._make_order_interactor.set_params(client=client, date=date_request)
             order_list = self._make_order_interactor.create()
 
             orders = []
 
             for i, element in enumerate(orders_request):
                 error.clear()
-                if element['id'] != None:
-                    id_order = element['id']
-                else:
-                    error['order[{}]'.format(i)] = 'id is required'
                 if element['requested_offer'] != None:
                     requested_offer_order = element['requested_offer']
                 else:
@@ -280,11 +271,6 @@ class OrderListView(object):
                     raise Exception(error)
 
                 error.clear()
-                if requested_offer_order['id'] != None:
-                    id_requested_offer = requested_offer_order['id']
-                else:
-                    error['order[{}].requested_offer.id'.format(
-                        i)] = 'id is required'
                 if requested_offer_order['base_offer'] != None:
                     base_offer_requested_offer = requested_offer_order['base_offer']
                 else:
@@ -315,15 +301,15 @@ class OrderListView(object):
                 # orders.append(order)
                 
             status = 201
-            return None, status
+            return OrderListSerializer.serialize(order_list), status
         except OfferAlreadyExist as e:
             body = {'error': e.args[0]}
             status = 400
             return body, status
-        # except Exception as e:
-        #     body = {'error': e.args[0]}
-        #     status = 500
-        #     return body, status
+        except Exception as e:
+            body = e.args
+            status = 500
+            return body, status
 
 
 class OrderListDetailView(object):
