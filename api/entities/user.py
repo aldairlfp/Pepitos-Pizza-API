@@ -1,10 +1,9 @@
 class User(object):
-    def __init__(self, id: int, username: str, password: str, is_admin: bool, email: str = None) -> None:
+    def __init__(self, id: int, username: str, password: str, is_admin: bool) -> None:
         self._id = id
         self._username = username
         self._password = password
         self._is_admin = is_admin
-        self._email = email
 
     @property
     def id(self):
@@ -21,7 +20,3 @@ class User(object):
     @property
     def is_admin(self):
         return self._is_admin
-
-    @property
-    def email(self):
-        return self._email

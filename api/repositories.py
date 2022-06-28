@@ -1,6 +1,7 @@
 from http import client
 from django.contrib.auth.models import User, Group, Permission
 
+from django.contrib.auth.models import User, Group, Permission
 from .models import BaseOffer as BaseOfferORM
 from .models import OrderList as OrderListORM
 from .models import Added as AddedORM
@@ -11,7 +12,7 @@ from api.entities.added import *
 from api.entities.client import *
 from api.entities.complaint import *
 from api.entities.group import *
-from api.entities.offer import *
+from api.entities.requested_offer import *
 from api.entities.order_list import *
 from api.entities.order import *
 from api.entities.permission import *
@@ -54,6 +55,27 @@ class BaseOfferDatabaseRepo(object):
         orm_base_offer.delete()
         return BaseOfferDatabaseRepo.decode_orm_element(orm_base_offer)
 
+    def create(self, id, name, available, price, addeds):
+        orm_base_offer = BaseOfferORM(
+            id=id, name=name, price=price, available=available, addeds=addeds)
+        orm_base_offer.save()
+        return BaseOfferDatabaseRepo.decode_orm_base_offer(orm_base_offer)
+        
+    def update(self, by_id, id, name, available, price, addeds):
+        orm_base_offer = BaseOfferORM.objects.get(pk=by_id)
+        orm_base_offer.id = id
+        orm_base_offer.name = name
+        orm_base_offer.price = price
+        orm_base_offer.available = available
+        orm_base_offer.addeds = addeds
+        orm_base_offer.save()
+        return BaseOfferDatabaseRepo.decode_orm_base_offer(orm_base_offer)
+        
+    def delete(self, id):
+        orm_base_offer = BaseOfferORM.objects.get(pk=id)
+        orm_base_offer.delete()
+        return BaseOfferDatabaseRepo.decode_orm_base_offer(orm_base_offer)
+
     @staticmethod
     def decode_orm_all(orm_base_offers):
         base_offers_list = []
@@ -67,6 +89,7 @@ class BaseOfferDatabaseRepo(object):
         addeds = AddedDatabaseRepo.decode_orm_all(
             orm_base_offer.addeds.all())
         return BaseOffer(orm_base_offer.id, orm_base_offer.name, orm_base_offer.avaidable, orm_base_offer.price, addeds)
+
 
 class AddedDatabaseRepo(object):
     def get_all(self):
@@ -273,4 +296,3 @@ class OrderListDatabaseRepo(object):
     @staticmethod
     def decode_orm_element(orm_order_list):
         return OrderList(orm_order_list.id, orm_order_list.date, orm_order_list.address, orm_order_list.state_order)
-        

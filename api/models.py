@@ -1,3 +1,5 @@
+import ctypes
+
 from django.db import models
 from django.core.validators import MinLengthValidator, MaxLengthValidator
 from django.core.exceptions import ValidationError
@@ -16,9 +18,12 @@ class BaseOffer(models.Model):
     available = models.BooleanField(default=True)
     addeds = models.ManyToManyField('Added')
     price = models.PositiveSmallIntegerField()
+    
+    def available_addeds(self):
+        return self.addeds.filter(available=True)
 
     def __str__(self) -> str:
-        return 'id_BO: ' + self.id.__str__() + ', name_BO: ' + self.name
+        return 'id_BO: {}, name_BO: {}, addeds: {}'.format(self.id.__str__(), self.name, self.addeds.filter(available=True))
 
     class Meta:
         db_table = 'base_offer'
@@ -42,8 +47,7 @@ class RequestedOffer(models.Model):
     addeds = models.ManyToManyField(Added)
 
     def __str__(self) -> str:
-        available = 'available ' if self.available else ' '
-        return str(self.id) + ' ' + self.base_offer.__str__() + ' ' + self.addeds.__str__() + ' ' + self.price.__str__() + ' ' + available
+        return str(self.id) + ' ' + self.base_offer.__str__() + ' ' + self.addeds.__str__() + ' '
 
     class Meta:
         db_table = 'requested_offer'
@@ -56,8 +60,6 @@ class Client(models.Model):
                             MinLengthValidator(1), MaxLengthValidator(100)])
     address = models.CharField(max_length=100, validators=[
                                MinLengthValidator(1), MaxLengthValidator(100)], null=False)
-    orders = models.ManyToManyField(
-        RequestedOffer, through='Order', through_fields=('client', 'offer'))
 
     class Meta:
         db_table = 'client'
@@ -65,17 +67,20 @@ class Client(models.Model):
 
 class OrderList(models.Model):
     id = models.CharField(max_length=100, primary_key=True)
+    client = models.ForeignKey(Client, on_delete=models.CASCADE)
     date = models.DateTimeField(auto_now_add=True)
-    address = models.CharField(max_length=100, validators=[
-                               MinLengthValidator(1), MaxLengthValidator(100)])
     StateOrder = models.TextChoices('StateOrder', 'Pending Accepted Canceled')
     state_order = models.CharField(max_length=30, choices=StateOrder.choices)
 
     def save(self, *args, **kwargs):
         hash_id = hash(self.id)
         hash_date = hash(self.date)
-        hash_address = hash(self.address)
-        self.id = hash_id ^ hash_date ^ hash_address
+        hash_client = hash(self.client.ci)
+        id_c = ctypes.c_ulong(hash_id).value
+        date_c = ctypes.c_ulong(hash_date).value
+        client_c = ctypes.c_ulong(hash_client).value
+        id = hex(id_c ^ date_c ^ client_c)
+        self.id = id
         super().save(*args, **kwargs)
 
     class Meta:
@@ -83,11 +88,9 @@ class OrderList(models.Model):
 
 
 class Order(models.Model):
-    client = models.ForeignKey(Client, on_delete=models.CASCADE)
-    offer = models.ForeignKey(RequestedOffer, on_delete=models.CASCADE)
+    requested_offer = models.ForeignKey(RequestedOffer, on_delete=models.CASCADE)
     amount = models.PositiveIntegerField()
     order_list = models.ForeignKey(OrderList, on_delete=models.CASCADE)
 
     class Meta:
         db_table = 'order'
-        unique_together = ('client', 'offer')

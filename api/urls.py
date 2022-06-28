@@ -10,7 +10,7 @@ from .factories import BaseOfferViewFactory
 app_name = "api"
 
 urlpatterns = [
-    path('base-offer', APIView_Wrapper.as_view(view_factory=BaseOfferViewFactory)),
+    path('base-offer/', APIView_Wrapper.as_view(view_factory=BaseOfferViewFactory)),
     # path('offers', APIView_Wrapper.as_view(view_factory=AllOffersViewFactory)),
     # path('client'),
     # path('order'),

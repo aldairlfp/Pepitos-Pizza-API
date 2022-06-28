@@ -1,6 +1,7 @@
 import json
 
 from rest_framework.views import APIView, Response
+from django.http import HttpResponse
 from django.contrib.auth.models import User
 
 from .poblate import Poblation
@@ -18,10 +19,10 @@ class APIView_Wrapper(APIView):
     view_factory = None
     queryset = User.objects.all()
 
-    def get(self, request):
+    def get(self, *args, **kwargs):
         Poblation.poblate()
-        body, status = self.view_factory.create().get()
-        return Response(body, status=status)
+        body, status = self.view_factory.create().get(*args, **kwargs)
+        return HttpResponse(json.dumps(body), status=status, content_type='application/json')
 
     def post(self, request):
         try:
