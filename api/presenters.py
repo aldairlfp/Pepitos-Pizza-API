@@ -1,3 +1,4 @@
+from xml.dom import UserDataHandler
 from .serializers import *
 from .exception import EntityDoesNotExist, OfferAlreadyExist
 
@@ -13,13 +14,28 @@ class BaseOfferView(object):
         return body, status
 
     def post(self, request_body):
-        try:
-            id = request_body['id']
-            name = request_body['name']
-            available = request_body['available']
-            price = request_body['price']
-            addeds = request_body['addeds']
-            self._manage_offers_interactor.set_params_base_offer(id=id, name=name, available=available, price=price, addeds=addeds)
+        try:            
+            error = {}
+            if request_body.key('id') != None:
+                id = request_body['id']
+            else:
+                error['id'] = 'id is required'
+            if request_body.key('name') != None:
+                name = request_body['name']
+            else:
+                error['name'] = 'name is required'
+            if request_body.key('price') != None:
+                price = request_body['price']
+            else:
+                error['price'] = 'price is required'
+            if request_body.key('addeds') != None:
+                addeds = request_body['addeds']
+            else:
+                error['addeds'] = 'addeds is required'
+            if error != {}:
+                raise Exception(error)
+            
+            self._manage_offers_interactor.set_params_base_offer(id=id, name=name, price=price, addeds=addeds)
             self._manage_offers_interactor.create_base_offer()
             status = 201
             return None, status
@@ -36,8 +52,8 @@ class BaseOfferDetailView(object):
     def __init__(self, manage_offers_interactor) -> None:
         self._manage_offers_interactor = manage_offers_interactor
 
-    def get(self, request, by_id):
-        self._manage_offers_interactor.set_params_base_offer(by_id=by_id)
+    def get(self, *args, **kwargs):
+        self._manage_offers_interactor.set_params_base_offer(by_id=kwargs['id'])
         base_offer = self._manage_offers_interactor.get_element_base_offer()
         body = BaseOfferSerializer.serialize(base_offer)
         status = 200
@@ -62,6 +78,7 @@ class BaseOfferDetailView(object):
                 price = request_body['price']
             if request_body.key('addeds') != None:
                 addeds = request_body['addeds']
+                
             self._manage_offers_interactor.set_params_base_offer(by_id=by_id, id=id, name=name, available=available, price=price, addeds=addeds)
             self._manage_offers_interactor.update_base_offer()
             status = 200
@@ -93,7 +110,7 @@ class AddedView(object):
     def __init__(self, manage_offers_interactor) -> None:
         self._manage_offers_interactor = manage_offers_interactor
 
-    def get(self):
+    def get(self, *args, **kwargs):
         addeds = self._manage_offers_interactor.get_all_addeds()
         body = BaseOfferSerializer.serialize(addeds, many=True)
         status = 200
@@ -122,8 +139,8 @@ class AddedDetailView(object):
     def __init__(self, manage_offers_interactor) -> None:
         self._manage_offers_interactor = manage_offers_interactor
 
-    def get(self, by_id):
-        self._manage_offers_interactor.set_params_added(by_id=by_id)
+    def get(self, *args, **kwargs):
+        self._manage_offers_interactor.set_params_added(by_id=kwargs['id'])
         added = self._manage_offers_interactor.get_element_added()
         body = AddedSerializer.serialize(added)
         status = 200
@@ -183,7 +200,7 @@ class OrderView(object):
         self._see_my_order_interactor = see_my_order_interactor
         self._make_order_interactor = make_order_interactor
     
-    def get(self):
+    def get(self, *args, **kwargs):
         orders = self._see_orders_interactor.get_all()
         body = OrderListSerializer.serialize(orders, many=True)
         status = 200
@@ -299,8 +316,8 @@ class OrderDetailView(object):
         self._see_my_order_interactor = see_my_order_interactor
         self._update_state_interactor = update_state_interactor
         
-    def get(self, request, pk):
-        self._see_my_order_interactor.set_params(by_id=pk)
+    def get(self, *args, **kwargs):
+        self._see_my_order_interactor.set_params(by_id=kwargs['id'])
         order_list = self._see_my_order_interactor.execute()
         body = OrderListSerializer.serialize(order_list)
         status = 200
@@ -330,3 +347,229 @@ class OrderDetailView(object):
             body = {'error': e.args[0]}
             status = 500
             return body, status
+            
+class UserView(object):
+    def __init__(self, manage_users_interactor) -> None:
+        self._manage_users_interactor = manage_users_interactor
+        
+    def get(self, *args, **kwargs):
+        users = self._manage_users_interactor.get_all()
+        body = UserSerializer.serialize(users, many=True)
+        status = 200
+        return body, status
+        
+    def post(self, *args, **kwargs):
+        try:
+            error = {}
+            request_body = args[0]
+            if request_body.key('id') != None:
+                id_request = request_body['id']
+            else:
+                error['id'] = 'id is required'
+            if request_body.key('username') != None:
+                username_request = request_body['username']
+            else:
+                error['username'] = 'username is required'
+            if request_body.key('password') != None:
+                password_request = request_body['password']
+            else:
+                error['password'] = 'password is required'
+            if error != {}:
+                raise Exception(error)
+                
+            self._manage_users_interactor.set_params(id=id, username=username_request, password=password_request)
+            self._manage_users_interactor.create()
+            status = 201
+            return None, status
+        except OfferAlreadyExist:
+            body = {'error': e.args[0]}
+            status = 400
+            return body, status
+        except Exception as e:
+            body = {'error': e.args[0]}
+            status = 500
+            return body, status
+            
+class UserDetailView(object):
+    def __init__(self, manage_users_interactor) -> None:
+        self._manage_users_interactor = manage_users_interactor
+        
+    def get(self, *args, **kwargs):
+        self._manage_users_interactor.set_params(by_id=kwargs['id'])
+        user = self._manage_users_interactor.get_element()
+        body = UserSerializer.serialize(user)
+        status = 200
+        return body, status
+        
+    def put(self, *args, **kwargs):
+        try:
+            self._manage_users_interactor.set_params(kwargs['id'])
+            user = self._manage_users_interactor.get_element()
+            id = user.id
+            username = user.username
+            password = user.password
+            is_admin = user.is_admin
+            
+            request_body = args[0]
+            if request_body.key('id') != None:
+                id = request_body['id']
+            if request_body.key('username') != None:
+                username = request_body['username']
+            if request_body.key('password') != None:
+                password = request_body['password']
+            if request_body.key('is_admin') != None:
+                is_admin = request_body['is_admin']
+                
+            self._manage_users_interactor.set_params(kwargs['id'], id, username, password, is_admin)
+            self._manage_users_interactor.update()
+            status = 200
+            return None, status
+        except EntityDoesNotExist:
+            body = {'error': e.args[0]}
+            status = 400
+            return body, status
+        except Exception as e:
+            body = {'error': e.args[0]}
+            status = 500
+            return body, status
+            
+    def delete(self, *args, **kwargs):
+        try:
+            self._manage_users_interactor.set_params(kwargs['id'])
+            self._manage_users_interactor.delete()
+            return None, 204
+        except EntityDoesNotExist as e:
+            body = {'error': e.args[0]}
+            status = 400
+            return body, status
+        except Exception as e:
+            body = {'error': e.args[0]}
+            status = 500
+            return body, status
+            
+class GroupView(object):
+    def __init__(self, manage_groups_interactor) -> None:
+        self._manage_groups_interactor = manage_groups_interactor
+        
+    def get(self, *args, **kwargs):
+        groups = self._manage_groups_interactor.get_all()
+        body = GroupSerializer.serialize(groups, many=True)
+        status = 200
+        return body, status
+        
+    def post(self, *args, **kwargs):
+        try:
+            error = {}
+            request_body = args[0]
+            if request_body.key('id') != None:
+                id = request_body['id']
+            else:
+                error['id'] = 'id is required'
+            if request_body.key('name') != None:
+                name = request_body['name']
+            else:
+                error['name'] = 'name is required'
+            if request_body.key('users') != None:
+                users = request_body['users']
+            else:
+                error['users'] = 'users is required'
+            if request_body.key('permissions') != None:
+                permissions = request_body['permissions']
+            else:
+                error['permissions'] = 'permissions is required'
+            if error != {}:
+                raise Exception(error)
+                
+            self._manage_groups_interactor.set_params(kwargs['id'], name, users, permissions)
+            self._manage_groups_interactor.create()
+            status = 201
+            return None, status
+        except OfferAlreadyExist:
+            body = {'error': e.args[0]}
+            status = 400
+            return body, status
+        except Exception as e:
+            body = {'error': e.args[0]}
+            status = 500
+            return body, status
+            
+class GroupDetailView(object):
+    def __init__(self, manage_groups_interactor) -> None:
+        self._manage_groups_interactor = manage_groups_interactor
+        
+    def get(self, *args, **kwargs):
+        self._manage_groups_interactor.set_params(by_id=kwargs['id'])
+        group = self._manage_groups_interactor.get_element()
+        body = GroupSerializer.serialize(group)
+        status = 200
+        return body, status
+        
+    def put(self, *args, **kwargs):
+        try:
+            self._manage_groups_interactor.set_params(kwargs['id'])
+            group = self._manage_groups_interactor.get_element()
+            id = group.id
+            name = group.name
+            users = group.users
+            permissions = group.permissions
+            
+            error = {}
+            request_body = args[0]
+            if request_body.key('id') != None:
+                id = request_body['id']
+            if request_body.key('name') != None:
+                name = request_body['name']
+            if request_body.key('users') != None:
+                users = request_body['users']
+            if request_body.key('permissions') != None:
+                permissions = request_body['permissions']
+            if error != {}:
+                raise Exception(error)
+                
+            self._manage_groups_interactor.set_params(kwargs['id'], name, users, permissions)
+            self._manage_groups_interactor.update()
+            status = 200
+            return None, status
+        except OfferAlreadyExist:
+            body = {'error': e.args[0]}
+            status = 400
+            return body, status
+        except Exception as e:
+            body = {'error': e.args[0]}
+            status = 500
+            return body, status
+            
+    def delete(self, *args, **kwargs):
+        try:
+            self._manage_groups_interactor.set_params(kwargs['id'])
+            self._manage_groups_interactor.delete()
+            return None, 204
+        except EntityDoesNotExist as e:
+            body = {'error': e.args[0]}
+            status = 400
+            return body, status
+        except Exception as e:
+            body = {'error': e.args[0]}
+            status = 500
+            return body, status
+            
+class PermissionView(object):
+    def __init__(self, manage_permissions_interactor) -> None:
+        self._manage_permissions_interactor = manage_permissions_interactor
+        
+    def get(self, *args, **kwargs):
+        permissions = self._manage_permissions_interactor.get_all()
+        body = PermissionSerializer.serialize(permissions, many=True)
+        status = 200
+        return body, status
+        
+class PermissionDetailView(object):
+    def __init__(self, manage_permissions_interactor) -> None:
+        self._manage_permissions_interactor = manage_permissions_interactor
+        
+    def get(self, *args, **kwargs):
+        self._manage_permissions_interactor.set_params(by_id=kwargs['id'])
+        permission = self._manage_permissions_interactor.get_element()
+        body = PermissionSerializer.serialize(permission)
+        status = 200
+        return body, status

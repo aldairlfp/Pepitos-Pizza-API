@@ -56,6 +56,13 @@ class BaseOfferViewFactory(object):
         manage_offers_interactor = ManageOffersInteractorFactory.get()
         return BaseOfferView(manage_offers_interactor)
         
+class BaseOfferDetailViewFactory(object):
+
+    @staticmethod
+    def create():
+        manage_offers_interactor = ManageOffersInteractorFactory.get()
+        return BaseOfferDetailView(manage_offers_interactor)
+        
 class AddedViewFactory(object):
 
     @staticmethod
