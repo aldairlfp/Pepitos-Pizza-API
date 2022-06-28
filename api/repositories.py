@@ -35,7 +35,7 @@ class BaseOfferDatabaseRepo(object):
     def create(self, name, price, addeds):
         orm_base_offer = BaseOfferORM(name=name, price=price)
         for element in addeds:
-            added = AddedORM(name=element.name, price=element.price)
+            added = AddedORM.objects.get(pk=element.id)
             orm_base_offer.addeds.add(added)            
         orm_base_offer.save()
         return BaseOfferDatabaseRepo.decode_orm_element(orm_base_offer)
@@ -120,8 +120,9 @@ class RequestedOfferDatabaseRepo(object):
         return RequestedOfferDatabaseRepo.decode_orm_element(orm_requested_offer)
 
     def create(self, base_offer, addeds):
-        base_offer_orm = BaseOfferORM(name=base_offer.name, price=base_offer.price)
+        base_offer_orm = BaseOfferORM.objects.get(pk=base_offer.id)
         orm_requested_offer = RequestedOfferORM(base_offer=base_offer_orm)
+        orm_requested_offer.save()
         for element in addeds:
             added = AddedORM.objects.get(pk=element.id)
             orm_requested_offer.addeds.add(added)
@@ -255,7 +256,7 @@ class OrderListDatabaseRepo(object):
         return OrderListDatabaseRepo.decode_orm_element(orm_order_list)
 
     def create(self, id, client, date):
-        client_orm = ClientORM(client.ci, client.name, client.address)
+        client_orm = ClientORM.objects.get(pk=client.ci)
         orm_order_list = OrderListORM(id=id, date=date, client=client_orm)
         orm_order_list.save()
         return OrderListDatabaseRepo.decode_orm_element(orm_order_list)

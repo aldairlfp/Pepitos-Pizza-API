@@ -44,7 +44,7 @@ class RequestedOffer(models.Model):
     addeds = models.ManyToManyField(Added)
 
     def __str__(self) -> str:
-        return str(self.id) + ' ' + self.base_offer.__str__() + ' ' + self.addeds.__str__() + ' '
+        return str(self.id) + ' ' + self.base_offer.name
 
     class Meta:
         db_table = 'requested_offer'

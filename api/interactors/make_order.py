@@ -9,7 +9,7 @@ class MakeOrderInteractor(object):
         self._date = date
 
     def create(self):
-        return self._order_list_repo.create(self._client, self._date)
+        return self._order_list_repo.create(self._id, self._client, self._date)
         
     def update(self):
         return self._order_list_repo.update(self._by_id, self._id, self._client, self._orders, self._date)
