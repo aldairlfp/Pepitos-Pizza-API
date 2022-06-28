@@ -226,7 +226,3 @@ class OrderListTest(TestCase):
         field_label = order_list._meta.get_field('state_order').verbose_name
         self.assertEqual(field_label, 'state_order')
     
-    
-    
-        
-    
