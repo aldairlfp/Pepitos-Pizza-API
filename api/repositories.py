@@ -1,8 +1,10 @@
 from django.forms import ValidationError
 
+from django.contrib.auth.models import User, Group, Permission
 from .models import BaseOffer as BaseOfferORM
 from .models import RequestedOffer as OfferORM
 from .models import Added as AddedORM
+from .models import RequestedOffer as RequestedOfferORM
 from api.entities.added import *
 from api.entities.client import *
 from api.entities.complaint import *
@@ -21,7 +23,7 @@ from .utils import *
 
 class BaseOfferDatabaseRepo(object):
     def get_all(self):
-        orm_base_offers = BaseOfferORM.objects.filter(available=True)
+        orm_base_offers = BaseOfferORM.objects.all()
         return BaseOfferDatabaseRepo.decode_orm_base_offers(orm_base_offers)
 
     def get_element(self, id):
@@ -50,7 +52,7 @@ class BaseOfferDatabaseRepo(object):
         return BaseOfferDatabaseRepo.decode_orm_base_offer(orm_base_offer)
 
     @staticmethod
-    def decode_orm_base_offers(orm_base_offers):
+    def decode_orm_all(orm_base_offers):
         base_offers_list = []
         for element in orm_base_offers:
             base_offer = BaseOfferDatabaseRepo.decode_orm_base_offer(element)
@@ -58,7 +60,7 @@ class BaseOfferDatabaseRepo(object):
         return base_offers_list
 
     @staticmethod
-    def decode_orm_base_offer(orm_base_offer):
+    def decode_orm_element(orm_base_offer):
         addeds = AddedDatabaseRepo.decode_orm_addeds(
             orm_base_offer.addeds.all())
         return BaseOffer(orm_base_offer.id, orm_base_offer.name, orm_base_offer.available, orm_base_offer.price, addeds)
@@ -66,7 +68,7 @@ class BaseOfferDatabaseRepo(object):
 
 class AddedDatabaseRepo(object):
     @staticmethod
-    def decode_orm_addeds(orm_addeds):
+    def decode_orm_all(orm_addeds):
         addeds_list = []
         for element in orm_addeds:
             added = AddedDatabaseRepo.decode_orm_added(element)
@@ -74,5 +76,5 @@ class AddedDatabaseRepo(object):
         return addeds_list
 
     @staticmethod
-    def decode_orm_added(orm_added):
+    def decode_orm_element(orm_added):
         return Added(orm_added.id, orm_added.name, orm_added.available, orm_added.price)
