@@ -1,7 +1,7 @@
-from django.forms import ValidationError
+from django.contrib.auth.models import User, Group, Permission
 
 from .models import BaseOffer as BaseOfferORM
-from .models import RequestedOffer as OfferORM
+from .models import OrderList as OrderListORM
 from .models import Added as AddedORM
 from .models import Client as ClientORM
 from .models import Order as OrderORM
@@ -131,7 +131,29 @@ class RequestedOfferDatabaseRepo(object):
     
     @staticmethod
     def decode_element(orm_requested_offer):
-        return RequestedOffer(orm_requested_offer.id, orm_requested_offer.base_offer, orm_requested_offer.addeds)
+        offers = BaseOfferDatabaseRepo.decode_all(orm_requested_offer.base_offer.all())
+        addeds = AddedDatabaseRepo.decode_all(orm_requested_offer.addeds.all())
+        return RequestedOffer(orm_requested_offer.id, offers, addeds)
 
         
-        
+class OrderListDatabaseRepo(object):
+    def get_all(self):
+        orm_order_lists = OrderListORM.objects.all()
+        return OrderListDatabaseRepo.decode_all(orm_order_lists)
+
+    def get_element(self, id):
+        orm_order_list = OrderListORM.objects.get(pk=id)
+        return OrderListDatabaseRepo.decode_element(orm_order_list)
+
+    @staticmethod
+    def decode_all(orm_order_lists):
+        order_list_list = []
+        for element in orm_order_lists:
+            order_list = OrderListDatabaseRepo.decode_element(element)
+            order_list_list.append(order_list)
+        return order_list_list
+
+    @staticmethod
+    def decode_element(orm_order_list):
+        orders = OrderDatabaseRepo.decode_all(orm_order_list.orders.all())
+        return OrderList(orm_order_list.id, orm_order_list.date, orm_order_list.address, orm_order_list.state, orders)
