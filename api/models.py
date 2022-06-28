@@ -14,15 +14,15 @@ def validate_int(value):
 
 class BaseOffer(models.Model):
     name = models.CharField(max_length=100)
-    avaidable = models.BooleanField(default=True)
+    available = models.BooleanField(default=True)
     addeds = models.ManyToManyField('Added')
     price = models.PositiveSmallIntegerField()
     
-    def avaidable_addeds(self):
-        return self.addeds.filter(avaidable=True)
+    def available_addeds(self):
+        return self.addeds.filter(available=True)
 
     def __str__(self) -> str:
-        return 'id_BO: {}, name_BO: {}, addeds: {}'.format(self.id.__str__(), self.name, self.addeds.filter(avaidable=True))
+        return 'id_BO: {}, name_BO: {}, addeds: {}'.format(self.id.__str__(), self.name, self.addeds.filter(available=True))
 
     class Meta:
         db_table = 'base_offer'
@@ -30,7 +30,7 @@ class BaseOffer(models.Model):
 
 class Added(models.Model):
     name = models.CharField(max_length=100)
-    avaidable = models.BooleanField(default=True)
+    available = models.BooleanField(default=True)
     price = models.PositiveSmallIntegerField()
 
     def __str__(self) -> str:

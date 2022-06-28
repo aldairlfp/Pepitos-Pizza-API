@@ -41,12 +41,12 @@ class BaseOfferDatabaseRepo(object):
         orm_base_offer.save()
         return BaseOfferDatabaseRepo.decode_orm_element(orm_base_offer)
 
-    def update(self, by_id, id, name, avaidable, price, addeds):
+    def update(self, by_id, id, name, available, price, addeds):
         orm_base_offer = BaseOfferORM.objects.get(pk=by_id)
         orm_base_offer.id = id
         orm_base_offer.name = name
         orm_base_offer.price = price
-        orm_base_offer.avaidable = avaidable
+        orm_base_offer.available = available
         orm_base_offer.addeds = addeds
         orm_base_offer.save()
         return BaseOfferDatabaseRepo.decode_orm_element(orm_base_offer)
@@ -68,7 +68,7 @@ class BaseOfferDatabaseRepo(object):
     def decode_orm_element(orm_base_offer):
         addeds = AddedDatabaseRepo.decode_orm_all(
             orm_base_offer.addeds.all())
-        return BaseOffer(orm_base_offer.id, orm_base_offer.name, orm_base_offer.avaidable, orm_base_offer.price, addeds)
+        return BaseOffer(orm_base_offer.id, orm_base_offer.name, orm_base_offer.available, orm_base_offer.price, addeds)
 
 
 class AddedDatabaseRepo(object):
@@ -80,16 +80,16 @@ class AddedDatabaseRepo(object):
         orm_added = AddedORM.objects.get(pk=id)
         return AddedDatabaseRepo.decode_orm_element(orm_added)
 
-    def create(self, name, avaidable, price):
-        orm_added = AddedORM(name, avaidable, price).save()
+    def create(self, name, available, price):
+        orm_added = AddedORM(name, available, price).save()
         return AddedDatabaseRepo.decode_orm_element(orm_added)
 
-    def update(self, by_id, id, name, avaidable, price):
+    def update(self, by_id, id, name, available, price):
         orm_added = AddedORM.objects.get(pk=by_id)
         orm_added.id = id
         orm_added.name = name
         orm_added.price = price
-        orm_added.avaidable = avaidable
+        orm_added.available = available
         orm_added.save()
         return AddedDatabaseRepo.decode_orm_element(orm_added)
 
@@ -108,7 +108,7 @@ class AddedDatabaseRepo(object):
 
     @staticmethod
     def decode_orm_element(orm_added):
-        return Added(orm_added.id, orm_added.name, orm_added.avaidable, orm_added.price)
+        return Added(orm_added.id, orm_added.name, orm_added.available, orm_added.price)
 
 
 class RequestedOfferDatabaseRepo(object):

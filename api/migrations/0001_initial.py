@@ -19,7 +19,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.PositiveIntegerField(primary_key=True, serialize=False)),
                 ('name', models.CharField(max_length=100)),
-                ('avaidable', models.BooleanField(default=True)),
+                ('available', models.BooleanField(default=True)),
                 ('price', models.PositiveSmallIntegerField()),
             ],
             options={
@@ -31,7 +31,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.PositiveIntegerField(primary_key=True, serialize=False)),
                 ('name', models.CharField(max_length=100)),
-                ('avaidable', models.BooleanField(default=True)),
+                ('available', models.BooleanField(default=True)),
                 ('price', models.PositiveSmallIntegerField()),
                 ('addeds', models.ManyToManyField(to='api.added')),
             ],

@@ -67,22 +67,22 @@ class BaseOfferDetailView(object):
             base_offer = self._manage_offers_interactor.get_element_base_offer()
             id = base_offer.id
             name = base_offer.name
-            avaidable = base_offer.avaidable
+            available = base_offer.available
             price = base_offer.price
             addeds = base_offer.addeds
             if request_body['id'] != None:
                 id = request_body['id']
             if request_body['name'] != None:
                 name = request_body['name']
-            if request_body['avaidable'] != None:
-                avaidable = request_body['avaidable']
+            if request_body['available'] != None:
+                available = request_body['available']
             if request_body['price'] != None:
                 price = request_body['price']
             if request_body['addeds'] != None:
                 addeds = request_body['addeds']
 
             self._manage_offers_interactor.set_params_base_offer(
-                by_id=by_id, id=id, name=name, avaidable=avaidable, price=price, addeds=addeds)
+                by_id=by_id, id=id, name=name, available=available, price=price, addeds=addeds)
             self._manage_offers_interactor.update_base_offer()
             status = 200
             return None, status
@@ -124,9 +124,9 @@ class AddedView(object):
         try:
             id = request_body['id']
             name = request_body['name']
-            avaidable = request_body['avaidable']
+            available = request_body['available']
             price = request_body['price']
-            self._manage_offers_interactor.set_params_base_offer(name=name, avaidable=avaidable, price=price)
+            self._manage_offers_interactor.set_params_base_offer(name=name, available=available, price=price)
             self._manage_offers_interactor.create_base_offer()
             status = 201
             return None, status
@@ -157,19 +157,19 @@ class AddedDetailView(object):
             added = self._manage_offers_interactor.get_element_added()
             id = added.id
             name = added.name
-            avaidable = added.avaidable
+            available = added.available
             price = added.price
             addeds = added.addeds
             if request_body['id'] != None:
                 id = request_body['id']
             if request_body['name'] != None:
                 name = request_body['name']
-            if request_body['avaidable'] != None:
-                avaidable = request_body['avaidable']
+            if request_body['available'] != None:
+                available = request_body['available']
             if request_body['price'] != None:
                 price = request_body['price']
             self._manage_offers_interactor.set_params_added(
-                by_id=by_id, id=id, name=name, avaidable=avaidable, price=price, addeds=addeds)
+                by_id=by_id, id=id, name=name, available=available, price=price, addeds=addeds)
             self._manage_offers_interactor.update_added()
             status = 200
             return None, status

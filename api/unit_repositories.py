@@ -9,11 +9,11 @@ class BaseOfferRepo(object):
     def get_element(self, id):
         return self.__db_repo.get_element(id)
 
-    def create(self, name, avaidable, price, addeds):
-        return self.__db_repo.create(name, avaidable, price, addeds)
+    def create(self, name, available, price, addeds):
+        return self.__db_repo.create(name, available, price, addeds)
 
-    def update(self, by_id, id, name, avaidable, price, addeds):
-        return self.__db_repo.update(by_id, id, name, avaidable, price, addeds)
+    def update(self, by_id, id, name, available, price, addeds):
+        return self.__db_repo.update(by_id, id, name, available, price, addeds)
 
     def delete(self, by_id):
         return self.__db_repo.delete(by_id)
@@ -30,11 +30,11 @@ class AddedRepo(object):
     def get_element(self, id):
         return self.__db_repo.get_element(id)
 
-    def create(self, name, avaidable, price):
-        return self.__db_repo.create(name, avaidable, price)
+    def create(self, name, available, price):
+        return self.__db_repo.create(name, available, price)
 
-    def update(self, by_id, id, name, avaidable, price):
-        return self.__db_repo.update(by_id, id, name, avaidable, price)
+    def update(self, by_id, id, name, available, price):
+        return self.__db_repo.update(by_id, id, name, available, price)
 
     def delete(self, by_id):
         return self.__db_repo.delete(by_id)
