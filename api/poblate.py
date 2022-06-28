@@ -1,4 +1,3 @@
-from matplotlib.style import available
 from .models import *
 
 class Poblation(object):
