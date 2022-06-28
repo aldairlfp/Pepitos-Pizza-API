@@ -38,6 +38,6 @@ class DecodeORM(object):
     def decode_orm_offer(orm_offer):
         base_offer = DecodeORM.decode_orm_base_offer(orm_offer.base_offer)
         amount_added = DecodeORM.decode_orm_amount_added(orm_offer.amount_added)
-        offer = RequestedOffer(orm_offer.id, base_offer, amount_added, orm_offer.price, orm_offer.available)
+        offer = RequestedOffer(orm_offer.id, base_offer, amount_added, orm_offer.price, orm_offer.avaidable)
         return offer
     

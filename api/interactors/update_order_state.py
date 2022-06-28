@@ -1,4 +1,4 @@
-class UpdateOrderState(object):
+class UpdateOrderStateInteractor(object):
     def __init__(self, order_list_repo) -> None:
         self._order_list_repo = order_list_repo
         

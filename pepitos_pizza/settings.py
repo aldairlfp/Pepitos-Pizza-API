@@ -90,7 +90,7 @@ DATABASES = {
         # 'USER': 'xreizdliixjwmh',
         # 'PASSWORD': '4e29331c416a234bddf4bf39a6d17dc916a3e1674d09c5805910c2218f9642a1',
          'ENGINE': 'django.db.backends.sqlite3',
-         'NAME': BASE_DIR / 'db1.sqlite3',
+         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
@@ -146,24 +146,26 @@ REST_FRAMEWORK = {
     ]
 }
 
+
 LOGGING = {
     'version': 1,
+    # The version number of our log
     'disable_existing_loggers': False,
-    'filters': {
-        'require_debug_true': {
-            '()': 'django.utils.log.RequireDebugTrue',
-        },
-    },
+    # django uses some of its own loggers for internal operations. In case you want to disable them just replace the False above with true.
+    # A handler for WARNING. It is basically writing the WARNING messages into a file called WARNING.log
     'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
-            'filters': ['require_debug_true'],
+        'file': {
+            'level': 'WARNING',
+            'class': 'logging.FileHandler',
+            'filename': BASE_DIR / 'warning.log',
         },
     },
+    # A logger for WARNING which has a handler called 'file'. A logger can have multiple handler
     'loggers': {
-        'mylogger': {
-            'handlers': ['console'],
-            'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
+       # notice the blank '', Usually you would put built in loggers like django or root here based on your needs
+        '': {
+            'handlers': ['file'], #notice how file variable is called in handler which has been defined above
+            'level': 'WARNING',
             'propagate': True,
         },
     },

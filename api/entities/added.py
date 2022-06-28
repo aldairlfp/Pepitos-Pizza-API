@@ -3,10 +3,10 @@ from cgi import print_environ
 
 
 class Added(object):
-    def __init__(self, id: int, name: str, available: bool, price: int):
+    def __init__(self, id: int, name: str, avaidable: bool, price: int):
         self._id = id
         self._name = name
-        self._available = available
+        self._avaidable = avaidable
         self._price = price
 
     @property
@@ -18,8 +18,8 @@ class Added(object):
         return self._name
         
     @property
-    def available(self):
-        return self._available
+    def avaidable(self):
+        return self._avaidable
         
     @property
     def price(self):

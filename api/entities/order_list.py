@@ -1,4 +1,4 @@
-class OrderList(object):
+class Order_List(object):
     def __init__(self, id: int, client, orders: list, date: str, state: str) -> None:
         self._id = id
         self._date = date

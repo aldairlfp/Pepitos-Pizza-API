@@ -14,4 +14,4 @@ class SeeMyOrdersInteractor(object):
             raise ValidationError('The order list id is not valid.')
             
     def execute(self):
-        return self._order_list_repo.get_order_list_by_id(self._order_list_id)
+        return self._order_list_repo.get_element(self._order_list_id)

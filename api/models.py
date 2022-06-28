@@ -13,26 +13,24 @@ def validate_int(value):
 
 
 class BaseOffer(models.Model):
-    id = models.PositiveIntegerField(primary_key=True)
     name = models.CharField(max_length=100)
-    available = models.BooleanField(default=True)
+    avaidable = models.BooleanField(default=True)
     addeds = models.ManyToManyField('Added')
     price = models.PositiveSmallIntegerField()
     
-    def available_addeds(self):
-        return self.addeds.filter(available=True)
+    def avaidable_addeds(self):
+        return self.addeds.filter(avaidable=True)
 
     def __str__(self) -> str:
-        return 'id_BO: {}, name_BO: {}, addeds: {}'.format(self.id.__str__(), self.name, self.addeds.filter(available=True))
+        return 'id_BO: {}, name_BO: {}, addeds: {}'.format(self.id.__str__(), self.name, self.addeds.filter(avaidable=True))
 
     class Meta:
         db_table = 'base_offer'
 
 
 class Added(models.Model):
-    id = models.PositiveIntegerField(primary_key=True)
     name = models.CharField(max_length=100)
-    available = models.BooleanField(default=True)
+    avaidable = models.BooleanField(default=True)
     price = models.PositiveSmallIntegerField()
 
     def __str__(self) -> str:
@@ -42,7 +40,6 @@ class Added(models.Model):
         db_table = 'added'
 
 class RequestedOffer(models.Model):
-    id = models.PositiveIntegerField(primary_key=True)
     base_offer = models.ForeignKey(BaseOffer, on_delete=models.CASCADE)
     addeds = models.ManyToManyField(Added)
 
@@ -70,7 +67,7 @@ class OrderList(models.Model):
     client = models.ForeignKey(Client, on_delete=models.CASCADE)
     date = models.DateTimeField(auto_now_add=True)
     StateOrder = models.TextChoices('StateOrder', 'Pending Accepted Canceled')
-    state_order = models.CharField(max_length=30, choices=StateOrder.choices)
+    state_order = models.CharField(max_length=30, choices=StateOrder.choices, default=StateOrder.Pending)
 
     def save(self, *args, **kwargs):
         hash_id = hash(self.id)

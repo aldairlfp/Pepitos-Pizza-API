@@ -9,11 +9,11 @@ class BaseOfferRepo(object):
     def get_element(self, id):
         return self.__db_repo.get_element(id)
 
-    def create(self, id, name, available, price, addeds):
-        return self.__db_repo.create(id, name, available, price, addeds)
+    def create(self, name, avaidable, price, addeds):
+        return self.__db_repo.create(name, avaidable, price, addeds)
 
-    def update(self, by_id, id, name, available, price, addeds):
-        return self.__db_repo.update(by_id, id, name, available, price, addeds)
+    def update(self, by_id, id, name, avaidable, price, addeds):
+        return self.__db_repo.update(by_id, id, name, avaidable, price, addeds)
 
     def delete(self, by_id):
         return self.__db_repo.delete(by_id)
@@ -30,11 +30,11 @@ class AddedRepo(object):
     def get_element(self, id):
         return self.__db_repo.get_element(id)
 
-    def create(self, id, name, available, price):
-        return self.__db_repo.create(id, name, available, price)
+    def create(self, name, avaidable, price):
+        return self.__db_repo.create(name, avaidable, price)
 
-    def update(self, by_id, id, name, available, price):
-        return self.__db_repo.update(by_id, id, name, available, price)
+    def update(self, by_id, id, name, avaidable, price):
+        return self.__db_repo.update(by_id, id, name, avaidable, price)
 
     def delete(self, by_id):
         return self.__db_repo.delete(by_id)
@@ -50,11 +50,11 @@ class RequestedOfferRepo(object):
     def get_element(self, id):
         return self.__db_repo.get_element(id)
 
-    def create(self, id, base_offer, addeds):
-        return self.__db_repo.create(id, base_offer, addeds)
+    def create(self, base_offer, addeds):
+        return self.__db_repo.create(base_offer, addeds)
 
-    def update(self, by_id, id, base_offer, addeds):
-        return self.__db_repo.create(by_id, id, base_offer, addeds)
+    def update(self, by_id, base_offer, addeds):
+        return self.__db_repo.create(by_id, base_offer, addeds)
 
     def delete(self, by_id):
         self.__db_repo.delete(by_id)
@@ -70,11 +70,11 @@ class OrderRepo(object):
     def get_element(self, id):
         return self.__db_repo.get_element(id)
 
-    def create(self, id, requested_offer, amount):
-        return self.__db_repo.create(id, requested_offer, amount)
+    def create(self, requested_offer, amount, order_list):
+        return self.__db_repo.create(requested_offer, amount, order_list)
 
-    def update(self, by_id, id, requested_offer, amount):
-        return self.__db_repo.update(by_id, id, requested_offer, amount)
+    def update(self, by_id, id, requested_offer, amount, order_list):
+        return self.__db_repo.update(by_id, id, requested_offer, amount, order_list)
 
     def delete(self, by_id):
         self.__db_repo.delete(by_id)
@@ -110,10 +110,10 @@ class OrderListRepo(object):
     def get_element(self, id):
         return self.__db_repo.get_element(id)
 
-    def create(self, id, client, orders, date, state):
-        return self.__db_repo.create(id, client, date, state)
+    def create(self, id, client, date):
+        return self.__db_repo.create(id, client, date)
 
-    def update(self, by_id, id, client, orders, date, state):
+    def update(self, by_id, id, client, date, state):
         return self.__db_repo.update(by_id, id, client, date, state)
 
     def delete(self, by_id):
@@ -130,8 +130,8 @@ class ComplaintRepo(object):
     def get_element(self, id):
         return self.__db_repo.get_element(id)
 
-    def create(self, id, text, client):
-        return self.__db_repo.create(id, text, client)
+    def create(self, text, client):
+        return self.__db_repo.create(text, client)
 
     def update(self, by_id, id, text, client):
         return self.__db_repo.update(by_id, id, text, client)
@@ -150,8 +150,8 @@ class GroupRepo(object):
     def get_element(self, id):
         return self.__db_repo.get_element(id)
 
-    def create(self, id, name, users, permissions):
-        return self.__db_repo.create(id, name, users, permissions)
+    def create(self, name, users, permissions):
+        return self.__db_repo.create(name, users, permissions)
 
     def update(self, by_id, id, name, users, permissions):
         return self.__db_repo.update(by_id, id, name, users, permissions)
@@ -170,8 +170,8 @@ class PermisionRepo(object):
     def get_element(self, id):
         return self.__db_repo.get_element(id)
 
-    def create(self, id, code, name):
-        return self.__db_repo.create(id, code, name)
+    def create(self, code, name):
+        return self.__db_repo.create(code, name)
 
     def update(self, by_id, id, code, name):
         return self.__db_repo.update(by_id, id, code, name)
@@ -190,8 +190,8 @@ class ProductRepo(object):
     def get_element(self, id):
         return self.__db_repo.get_element(id)
 
-    def create(self, id, name, amount):
-        return self.__db_repo.create(id, name, amount)
+    def create(self, name, amount):
+        return self.__db_repo.create(name, amount)
 
     def update(self, by_id, id, name, amount):
         return self.__db_repo.update(by_id, id, name, amount)
@@ -210,8 +210,8 @@ class UpgradeStoreRepo(object):
     def get_element(self, id):
         return self.__db_repo.get_element(id)
 
-    def create(self, id, date, products):
-        return self.__db_repo.create(id, date, products)
+    def create(self, date, products):
+        return self.__db_repo.create(date, products)
 
     def update(self, by_id, id, date, products):
         return self.__db_repo.update(by_id, id, date, products)
@@ -230,8 +230,8 @@ class UserRepo(object):
     def get_element(self, id):
         return self.__db_repo.get_element(id)
 
-    def create(self, id, username, password, is_admin):
-        return self.__db_repo.create(id, username, password, is_admin)
+    def create(self, username, password, is_admin):
+        return self.__db_repo.create(username, password, is_admin)
 
     def update(self, by_id, id, username, password, is_admin):
         return self.__db_repo.update(by_id, id, username, password, is_admin)

@@ -16,7 +16,7 @@ class ManageUsersInteractor(object):
         return self._user_repo.get_element(self._by_id)
 
     def create(self):
-        return self._user_repo.create(self._id, self._username,
+        return self._user_repo.create(self._username,
                                self._password, self._is_admin)
 
     def update(self):

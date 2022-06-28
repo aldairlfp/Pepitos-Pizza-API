@@ -16,7 +16,7 @@ class ManageGroupsInteractor(object):
         return self._group_repo.get_element(self._by_id)
 
     def create(self):
-        return self._group_repo.create(self._id, self._name,
+        return self._group_repo.create(self._name,
                                 self._users, self._permissions)
 
     def update(self):

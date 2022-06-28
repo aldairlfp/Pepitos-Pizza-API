@@ -11,9 +11,8 @@ class BaseOfferSerializer(object):
             return {
                 'id': base_offer.id,
                 'name': base_offer.name,
-                'available': base_offer.available,
                 'price': base_offer.price,
-                'addeds': AddedSerializer.serialize(base_offer.addeds, many=True)
+                'addeds': AddedSerializer.serialize(base_offer.addeds.all(), many=True)
             }
 
 
@@ -30,7 +29,6 @@ class AddedSerializer(object):
             return {
                 'id': added.id,
                 'name': added.name,
-                'available': added.available,
                 'price': added.price
             }
 
@@ -47,8 +45,7 @@ class RequestedOfferSerializer(object):
         return {
             'id': offer.id,
             'base_offer': BaseOfferSerializer.serialize(offer.base_offer),
-            'addeds': AddedSerializer.serialize(offer.addeds, many=True),
-            'amount': offer.amount,
+            'addeds': AddedSerializer.serialize(offer.addeds.all(), many=True),
         }
 
 class ClientSerializer(object):
@@ -94,9 +91,9 @@ class OrderListSerializer(object):
         else:
             return {
                 'id': order_list.id,
-                'client': order_list.client,
-                'orders': OrderSerializer(order_list.orders, many=True),
-                'date': order_list.date,
+                'client': ClientSerializer.serialize(order_list.client),
+                'orders': OrderSerializer.serialize(order_list.orders, many=True),
+                'date': order_list.date.__str__(),
                 'state': order_list.state
             }
 
