@@ -1,4 +1,5 @@
 from django.forms import ValidationError
+from matplotlib.style import available
 
 from .models import BaseOffer as BaseOfferORM
 from .models import RequestedOffer as OfferORM
@@ -20,11 +21,11 @@ from .utils import *
 
 
 class BaseOfferDatabaseRepo(object):
-    def get_base_offers(self):
-        orm_base_offers = BaseOfferORM.objects.all()
+    def get_all(self):
+        orm_base_offers = BaseOfferORM.objects.filter(available=True)
         return BaseOfferDatabaseRepo.decode_orm_base_offers(orm_base_offers)
 
-    def get_base_offer(self, id):
+    def get_element(self, id):
         orm_base_offer = BaseOfferORM.objects.get(pk=id)
         return BaseOfferDatabaseRepo.decode_orm_base_offer(orm_base_offer)
 

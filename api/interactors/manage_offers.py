@@ -1,6 +1,6 @@
 class ManageOffersInteractor(object):
-    def __init__(self, _base_offer_repo=None, added_repo=None) -> None:
-        self._base_offer_repo = _base_offer_repo
+    def __init__(self, base_offer_repo=None, added_repo=None) -> None:
+        self._base_offer_repo = base_offer_repo
         self._added_repo = added_repo
 
     def set_params_base_offer(self, by_id=None, id=None, name=None, available=None, price=None, addeds=None):

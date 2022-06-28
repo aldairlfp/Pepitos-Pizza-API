@@ -6,7 +6,7 @@ class BaseOfferView(object):
     def __init__(self, manage_offers_interactor) -> None:
         self._manage_offers_interactor = manage_offers_interactor
 
-    def get(self):
+    def get(self, *args, **kwargs):
         base_offers = self._manage_offers_interactor.get_all_base_offers()
         body = BaseOfferSerializer.serialize(base_offers, many=True)
         status = 200

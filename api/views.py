@@ -18,9 +18,9 @@ class APIView_Wrapper(APIView):
     view_factory = None
     queryset = User.objects.all()
 
-    def get(self, request):
+    def get(self, *args, **kwargs):
         Poblation.poblate()
-        body, status = self.view_factory.create().get()
+        body, status = self.view_factory.create().get(*args, **kwargs)
         return Response(body, status=status)
 
     def post(self, request):

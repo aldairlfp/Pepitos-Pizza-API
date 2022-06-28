@@ -18,9 +18,12 @@ class BaseOffer(models.Model):
     available = models.BooleanField(default=True)
     addeds = models.ManyToManyField('Added')
     price = models.PositiveSmallIntegerField()
+    
+    def available_addeds(self):
+        return self.addeds.filter(available=True)
 
     def __str__(self) -> str:
-        return 'id_BO: ' + self.id.__str__() + ', name_BO: ' + self.name
+        return 'id_BO: {}, name_BO: {}, addeds: {}'.format(self.id.__str__(), self.name, self.addeds.filter(available=True))
 
     class Meta:
         db_table = 'base_offer'

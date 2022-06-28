@@ -4,13 +4,13 @@ from django.urls import URLPattern, path
 from rest_framework.authtoken import views
 
 from .views import *
-# from .factories import BaseOfferViewFactory
+from .factories import BaseOfferViewFactory
 
 
 app_name = "api"
 
 urlpatterns = [
-    # path('base-offer', APIView_Wrapper.as_view(view_factory=BaseOfferViewFactory)),
+    path('base-offer/', APIView_Wrapper.as_view(view_factory=BaseOfferViewFactory)),
     # path('offers', APIView_Wrapper.as_view(view_factory=AllOffersViewFactory)),
     # path('client'),
     # path('order'),
