@@ -1,6 +1,6 @@
 from api.models import BaseOffer
 from .serializers import *
-from .exception import EntityDoesNotExist, OfferAlreadyExist
+from .exception import EntityAlreadyExist, OfferAlreadyExist
 
 
 class BaseOfferView(object):
@@ -84,7 +84,7 @@ class BaseOfferDetailView(object):
             body = BaseOfferSerializer.serialize(base_offer)
             status = 200
             return body, status
-        except EntityDoesNotExist:
+        except EntityAlreadyExist as e:
             body = {'error': e.args[0]}
             status = 400
             return body, status
@@ -99,7 +99,7 @@ class BaseOfferDetailView(object):
             base_offer = self._manage_offers_interactor.delete_base_offer()
             body = BaseOfferSerializer.serialize(base_offer)
             return body, 204
-        except EntityDoesNotExist as e:
+        except EntityAlreadyExist as e:
             body = {'error': e.args[0]}
             status = 400
             return body, status
@@ -183,7 +183,7 @@ class AddedDetailView(object):
             body = AddedSerializer.serialize(added)
             status = 200
             return body, status
-        except EntityDoesNotExist as e:
+        except EntityAlreadyExist as e:
             body = {'error': e.args[0]}
             status = 400
             return body, status
@@ -197,7 +197,7 @@ class AddedDetailView(object):
             self._manage_offers_interactor.set_params_added(by_id=id)
             self._manage_offers_interactor.delete_added()
             return None, 204
-        except EntityDoesNotExist as e:
+        except EntityAlreadyExist as e:
             body = {'error': e.args[0]}
             status = 400
             return body, status
@@ -354,7 +354,7 @@ class OrderListDetailView(object):
             body = OrderListSerializer.serialize(order_list)
             status = 200
             return body, status
-        except EntityDoesNotExist as e:
+        except EntityAlreadyExist as e:
             body = {'error': e.args[0]}
             status = 400
             return body, status

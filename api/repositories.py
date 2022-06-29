@@ -36,15 +36,15 @@ class BaseOfferDatabaseRepo(object):
 
     def create(self, name:str, price:str, addeds:list):
         orm_base_offer = BaseOfferORM(name=name, price=price)
-        if len(BaseOfferORM.objects.filter(name=orm_base_offer.name, price=orm_base_offer.price)) == 0:
+        if len(BaseOfferORM.objects.filter(name=orm_base_offer.name)) == 0:
             orm_base_offer.save()
             for element in addeds:
                 added = AddedORM.objects.get(pk=element)
                 orm_base_offer.addeds.add(added)
             orm_base_offer.save()
+            return BaseOfferDatabaseRepo.decode_orm_element(orm_base_offer)
         else:
-            orm_base_offer = BaseOfferORM.objects.filter(name=orm_base_offer.name, price=orm_base_offer.price)[0]
-        return BaseOfferDatabaseRepo.decode_orm_element(orm_base_offer)
+            raise EntityAlreadyExist("BaseOffer already exist")
 
     def update(self, by_id:int, id:int, name:str, available:bool, price:str, addeds:list):
         orm_base_offer = BaseOfferORM.objects.get(pk=by_id)
@@ -52,11 +52,15 @@ class BaseOfferDatabaseRepo(object):
         orm_base_offer.name = name
         orm_base_offer.price = price
         orm_base_offer.available = available
-        for element in addeds:
-            added = AddedORM.objects.get(pk=element)
-            orm_base_offer.addeds.add(added)
-        orm_base_offer.save()
-        return BaseOfferDatabaseRepo.decode_orm_element(orm_base_offer)
+        if len(BaseOfferORM.objects.filter(name=orm_base_offer.name)) == 0:
+            orm_base_offer.save()
+            for element in addeds:
+                added = AddedORM.objects.get(pk=element)
+                orm_base_offer.addeds.add(added)
+            orm_base_offer.save()
+            return BaseOfferDatabaseRepo.decode_orm_element(orm_base_offer)
+        else:
+            raise EntityAlreadyExist("BaseOffer already exist")
 
     def delete(self, id:int):
         orm_base_offer = BaseOfferORM.objects.get(pk=id)
@@ -89,8 +93,11 @@ class AddedDatabaseRepo(object):
 
     def create(self, name:str, price:int):
         orm_added = AddedORM(name=name, price=price)
-        orm_added.save()
-        return AddedDatabaseRepo.decode_orm_element(orm_added)
+        if len(AddedORM.objects.filter(name=orm_added.name)) == 0:
+            orm_added.save()
+            return AddedDatabaseRepo.decode_orm_element(orm_added)
+        else:
+            raise EntityAlreadyExist("Added already exist")
 
     def update(self, by_id:int, id:int, name:int, available:bool, price:int):
         orm_added = AddedORM.objects.get(pk=by_id)
@@ -98,8 +105,11 @@ class AddedDatabaseRepo(object):
         orm_added.name = name
         orm_added.price = price
         orm_added.available = available
-        orm_added.save()
-        return AddedDatabaseRepo.decode_orm_element(orm_added)
+        if len(AddedORM.objects.filter(name=orm_added.name)) == 0:
+            orm_added.save()
+            return AddedDatabaseRepo.decode_orm_element(orm_added)
+        else:
+            raise EntityAlreadyExist("Added already exist")
 
     def delete(self, id:int):
         orm_added = AddedORM.objects.get(pk=id)
