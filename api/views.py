@@ -5,19 +5,11 @@ from django.http import HttpResponse
 from django.contrib.auth.models import User
 
 from .poblate import Poblation
-
-
-# class BaseOfferAPIView(APIView):
-#     view_factory = None
-
-#     def get(self, request):
-#         body, status = self.view_factory.create().get()
-#         return Response(body, status=status)
-
+from .models import BaseOffer
 
 class APIView_Wrapper(APIView):
     view_factory = None
-    queryset = User.objects.all()
+    queryset = BaseOffer.objects.all()
 
     def get(self, *args, **kwargs):
         Poblation.poblate()

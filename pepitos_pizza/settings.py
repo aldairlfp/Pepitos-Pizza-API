@@ -88,14 +88,14 @@ WSGI_APPLICATION = 'pepitos_pizza.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'dcrvtqu4uajsvi',
-        'HOST': 'ec2-52-71-23-11.compute-1.amazonaws.com',
-        'PORT': '5432',
-        'USER': 'xreizdliixjwmh',
-        'PASSWORD': '4e29331c416a234bddf4bf39a6d17dc916a3e1674d09c5805910c2218f9642a1',
-        #  'ENGINE': 'django.db.backends.sqlite3',
-        #  'NAME': BASE_DIR / 'db1.sqlite3',
+        # 'ENGINE': 'django.db.backends.postgresql',
+        # 'NAME': 'dcrvtqu4uajsvi',
+        # 'HOST': 'ec2-52-71-23-11.compute-1.amazonaws.com',
+        # 'PORT': '5432',
+        # 'USER': 'xreizdliixjwmh',
+        # 'PASSWORD': '4e29331c416a234bddf4bf39a6d17dc916a3e1674d09c5805910c2218f9642a1',
+         'ENGINE': 'django.db.backends.sqlite3',
+         'NAME': BASE_DIR / 'db1.sqlite3',
     }
 }
 
@@ -143,35 +143,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
-        # 'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+        'rest_framework.permissions.DjangoModelPermissions',
+        'rest_framework.permissions.IsAuthenticated'
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication'
     ]
-}
-
-
-LOGGING = {
-    'version': 1,
-    # The version number of our log
-    'disable_existing_loggers': False,
-    # django uses some of its own loggers for internal operations. In case you want to disable them just replace the False above with true.
-    # A handler for WARNING. It is basically writing the WARNING messages into a file called WARNING.log
-    'handlers': {
-        'file': {
-            'level': 'WARNING',
-            'class': 'logging.FileHandler',
-            'filename': BASE_DIR / 'warning.log',
-        },
-    },
-    # A logger for WARNING which has a handler called 'file'. A logger can have multiple handler
-    'loggers': {
-       # notice the blank '', Usually you would put built in loggers like django or root here based on your needs
-        '': {
-            'handlers': ['file'], #notice how file variable is called in handler which has been defined above
-            'level': 'WARNING',
-            'propagate': True,
-        },
-    },
 }

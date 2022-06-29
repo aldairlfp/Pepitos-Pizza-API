@@ -12,10 +12,6 @@ class Group(object):
     @property
     def name(self):
         return self._name
-
-    @property
-    def users(self):
-        return self._users
         
     @property
     def permissions(self):

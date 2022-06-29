@@ -1,6 +1,6 @@
 import datetime
 
-from django.contrib.auth.models import User, Group, Permission
+from django.contrib.auth.models import User as UserORM, Group as GroupORM, Permission as PermissionORM
 
 from django.contrib.auth.models import User, Group, Permission
 from .models import BaseOffer as BaseOfferORM, OrderList
@@ -308,6 +308,85 @@ class OrderListDatabaseRepo(object):
     def decode_orm_element(orm_order_list):
         client = ClientDatabaseRepo.decode_orm_element(orm_order_list.client)
         orders = OrderDatabaseRepo.decode_orm_all(orm_order_list.order_set.all())
-        # date = OrderListORM.objects.datetimes('date', 'second')
         date = orm_order_list.date
         return Order_List(orm_order_list.id, client, orders, date, orm_order_list.state_order)
+        
+class UserDatabaseRepo(object):
+    def get_all(self):
+        orm_users = UserORM.objects.all()
+        return UserDatabaseRepo.decode_orm_all(orm_users)
+
+    def get_element(self, id:int):
+        orm_user = UserORM.objects.get(pk=id)
+        return UserDatabaseRepo.decode_orm_element(orm_user)
+
+    def create(self, username:str, password:str, is_admin:bool):
+        orm_user = UserORM(username=username, password=password, is_admin=is_admin)
+        orm_user.save()
+        return UserDatabaseRepo.decode_orm_element(orm_user)
+
+    def update(self, by_id:int, id:int, username:str, password:str, is_admin:bool):
+        orm_user = UserORM.objects.get(pk=by_id)
+        orm_user.id = id 
+        orm_user.username = username
+        orm_user.password = password
+        orm_user.is_admin = is_admin
+        orm_user.save()
+        return UserDatabaseRepo.decode_orm_element(orm_user)
+
+    def delete(self, id:int):
+        orm_user = UserORM.objects.get(pk=id)
+        orm_user.delete()
+        return UserDatabaseRepo.decode_orm_element(orm_user)
+
+    @staticmethod
+    def decode_orm_all(orm_users):
+        users_list = []
+        for element in orm_users:
+            user = UserDatabaseRepo.decode_orm_element(element)
+            users_list.append(user)
+        return users_list
+
+    @staticmethod
+    def decode_orm_element(orm_user):
+        user = User(orm_user.username, orm_user.password)
+        return user
+        
+class GroupDatabaseRepo(object):
+    def get_all(self):
+        orm_groups = GroupORM.objects.all()
+        return GroupDatabaseRepo.decode_orm_all(orm_groups)
+
+    def get_element(self, id:int):
+        orm_group = GroupORM.objects.get(pk=id)
+        return GroupDatabaseRepo.decode_orm_element(orm_group)
+
+    def create(self, id:int, name:str):
+        orm_group = GroupORM(id=id, name=name)
+        orm_group.save()
+        return GroupDatabaseRepo.decode_orm_element(orm_group)
+
+    def update(self, by_id:int, id:int, name:str):
+        orm_group = GroupORM.objects.get(pk=by_id)
+        orm_group.id = id
+        orm_group.name = name
+        orm_group.save()
+        return GroupDatabaseRepo.decode_orm_element(orm_group)
+
+    def delete(self, id:int):
+        orm_group = GroupORM.objects.get(pk=id)
+        orm_group.delete()
+        return GroupDatabaseRepo.decode_orm_element(orm_group)
+
+    @staticmethod
+    def decode_orm_all(orm_groups):
+        groups_list = []
+        for element in orm_groups:
+            group = GroupDatabaseRepo.decode_orm_element(element)
+            groups_list.append(group)
+        return groups_list
+
+    @staticmethod
+    def decode_orm_element(orm_group):
+        group = Group(orm_group.id, orm_group.name)
+        return group
