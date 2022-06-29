@@ -45,11 +45,5 @@ class DetailAPIView_Wrapper(APIView):
             return HttpResponse(json.dumps(body), status=status, content_type='application/json', headers={ 'Access-Control-Allow-Origin': '*' })
             
     def delete(self, request, id):
-        try:
-            request_body = json.loads(request.body)
-        except ValueError:
-            body = {'error': 'The request body must be in json format.'}
-            return HttpResponse(body, status=400, content_type='application/json', headers={ 'Access-Control-Allow-Origin': '*' })
-        else:
-            body, status = self.view_factory.create().delete(id)
-            return HttpResponse(json.dumps(body), status=status, content_type='application/json', headers={ 'Access-Control-Allow-Origin': '*' })
+        body, status = self.view_factory.create().delete(id)
+        return HttpResponse(json.dumps(body), status=status, content_type='application/json', headers={ 'Access-Control-Allow-Origin': '*' })
