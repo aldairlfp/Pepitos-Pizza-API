@@ -30,7 +30,8 @@ class AddedSerializer(object):
             return {
                 'id': added.id,
                 'name': added.name,
-                'price': added.price
+                'price': added.price,
+                'url': ''
             }
 
 
