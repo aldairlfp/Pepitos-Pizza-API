@@ -1,5 +1,7 @@
+from .base_offer import BaseOffer
+
 class RequestedOffer(object):
-    def __init__(self, id: int, base_offer, addeds) -> None:
+    def __init__(self, id: int, base_offer:BaseOffer, addeds:list) -> None:
         self._id = id
         self._base_offer = base_offer
         self._addeds = addeds

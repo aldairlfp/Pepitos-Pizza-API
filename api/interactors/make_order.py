@@ -1,8 +1,12 @@
+from ..entities.client import Client
+
+from ..unit_repositories import OrderListRepo
+
 class MakeOrderInteractor(object):
-    def __init__(self, order_list_repo) -> None:
-        self._order_list_repo = order_list_repo
+    def __init__(self, order_list_repo:OrderListRepo) -> None:
+        self._order_list_repo:OrderListRepo = order_list_repo
         
-    def set_params(self, by_id=None, id=None, client=None, date=None):
+    def set_params(self, by_id:str=None, id:str=None, client:Client=None, date:str=None):
         self._by_id = by_id
         self._id = id
         self._client = client

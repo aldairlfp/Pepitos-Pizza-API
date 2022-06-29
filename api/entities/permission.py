@@ -1,5 +1,5 @@
 class Permission(object):
-    def __init__(self, id, code, name) -> None:
+    def __init__(self, id:int, code:int, name:str) -> None:
         self._id = id
         self._code = code
         self._name = name

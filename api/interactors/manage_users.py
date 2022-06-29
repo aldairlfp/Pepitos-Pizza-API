@@ -1,8 +1,10 @@
-class ManageUsersInteractor(object):
-    def __init__(self, user_repo) -> None:
-        self._user_repo = user_repo
+from ..unit_repositories import UserRepo
 
-    def set_params(self, by_id=None, id=None, username=None, password=None, is_admin=None):
+class ManageUsersInteractor(object):
+    def __init__(self, user_repo:UserRepo) -> None:
+        self._user_repo:UserRepo = user_repo
+
+    def set_params(self, by_id:int=None, id:int=None, username:str=None, password:str=None, is_admin:bool=None):
         self._by_id = by_id
         self._id = id
         self._username = username

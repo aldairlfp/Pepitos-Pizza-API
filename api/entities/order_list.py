@@ -1,5 +1,8 @@
+from .client import Client
+
+
 class Order_List(object):
-    def __init__(self, id: int, client, orders: list, date: str, state: str) -> None:
+    def __init__(self, id: int, client: Client, orders: list, date: str, state: str) -> None:
         self._id = id
         self._date = date
         self._state = state
@@ -21,7 +24,7 @@ class Order_List(object):
     @property
     def orders(self):
         return self._orders
-        
+
     @property
     def client(self):
         return self._client

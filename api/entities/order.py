@@ -1,8 +1,9 @@
 from api.models import OrderList
 
 
+from .requested_offer import RequestedOffer
 class Order(object):
-    def __init__(self, id, requested_offer, amount: int, order_list) -> None:
+    def __init__(self, id:int, requested_offer: RequestedOffer, amount: int, order_list) -> None:
         self._id = id
         self._requested_offer = requested_offer
         self._amount = amount

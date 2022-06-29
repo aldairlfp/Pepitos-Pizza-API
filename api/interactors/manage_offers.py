@@ -1,9 +1,11 @@
-class ManageOffersInteractor(object):
-    def __init__(self, base_offer_repo=None, added_repo=None) -> None:
-        self._base_offer_repo = base_offer_repo
-        self._added_repo = added_repo
+from ..unit_repositories import BaseOfferRepo, AddedRepo
 
-    def set_params_base_offer(self, by_id=None, id=None, name=None, available=None, price=None, addeds=None):
+class ManageOffersInteractor(object):
+    def __init__(self, base_offer_repo:BaseOfferRepo=None, added_repo:AddedRepo=None) -> None:
+        self._base_offer_repo:BaseOfferRepo = base_offer_repo
+        self._added_repo:AddedRepo = added_repo
+
+    def set_params_base_offer(self, by_id:int=None, id:int=None, name:str=None, available:bool=None, price:int=None, addeds:list=None):
         self._by_id_base_offer = by_id
         self._id_base_offer = id
         self._name_base_offer = name
@@ -11,7 +13,7 @@ class ManageOffersInteractor(object):
         self._price_base_offer = price
         self._addeds_base_offer = addeds
 
-    def set_params_added(self, by_id=None, id=None, name=None, available=None, price=None):
+    def set_params_added(self, by_id:int=None, id:int=None, name:str=None, available:bool=None, price:int=None):
         self._by_id_added = by_id
         self._id_added = id
         self._name_added = name

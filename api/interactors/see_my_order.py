@@ -1,10 +1,11 @@
+from ..unit_repositories import OrderListRepo
 from ..exception import ValidationError
 
 class SeeMyOrdersInteractor(object):
-    def __init__(self, order_list_repo) -> None:
-        self._order_list_repo = order_list_repo
+    def __init__(self, order_list_repo:OrderListRepo) -> None:
+        self._order_list_repo:OrderListRepo = order_list_repo
         
-    def set_params(self, order_list_id):
+    def set_params(self, order_list_id:str):
         self._order_list_id = order_list_id
         
     def validate(self):

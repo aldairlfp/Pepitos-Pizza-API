@@ -1,8 +1,12 @@
-class MakeOfferInteractor(object):
-    def __init__(self, requested_offer_repo) -> None:
-        self._requested_offer_repo = requested_offer_repo
+from ..entities.base_offer import BaseOffer
 
-    def set_params(self, by_id=None, id=None, base_offer=None, addeds=None):
+from ..unit_repositories import RequestedOfferRepo
+
+class MakeOfferInteractor(object):
+    def __init__(self, requested_offer_repo:RequestedOfferRepo) -> None:
+        self._requested_offer_repo:RequestedOfferRepo = requested_offer_repo
+
+    def set_params(self, by_id:int=None, id:int=None, base_offer:BaseOffer=None, addeds:list=None):
         self._by_id = by_id
         self._id = id
         self._base_offer = base_offer

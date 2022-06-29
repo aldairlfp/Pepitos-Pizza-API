@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User, Group, Permission
 
 from django.contrib.auth.models import User, Group, Permission
-from .models import BaseOffer as BaseOfferORM
+from .models import BaseOffer as BaseOfferORM, OrderList
 from .models import OrderList as OrderListORM
 from .models import Added as AddedORM
 from .models import Client as ClientORM
@@ -28,11 +28,11 @@ class BaseOfferDatabaseRepo(object):
         orm_base_offers = BaseOfferORM.objects.all()
         return BaseOfferDatabaseRepo.decode_orm_all(orm_base_offers)
 
-    def get_element(self, id):
+    def get_element(self, id:int):
         orm_base_offer = BaseOfferORM.objects.get(pk=id)
         return BaseOfferDatabaseRepo.decode_orm_element(orm_base_offer)
 
-    def create(self, name, price, addeds):
+    def create(self, name:str, price:str, addeds:list):
         orm_base_offer = BaseOfferORM(name=name, price=price)
         orm_base_offer.save()
         for element in addeds:
@@ -41,7 +41,7 @@ class BaseOfferDatabaseRepo(object):
         orm_base_offer.save()
         return BaseOfferDatabaseRepo.decode_orm_element(orm_base_offer)
 
-    def update(self, by_id, id, name, available, price, addeds):
+    def update(self, by_id:int, id:int, name:str, available:bool, price:str, addeds:list):
         orm_base_offer = BaseOfferORM.objects.get(pk=by_id)
         orm_base_offer.id = id
         orm_base_offer.name = name
@@ -51,7 +51,7 @@ class BaseOfferDatabaseRepo(object):
         orm_base_offer.save()
         return BaseOfferDatabaseRepo.decode_orm_element(orm_base_offer)
 
-    def delete(self, id):
+    def delete(self, id:int):
         orm_base_offer = BaseOfferORM.objects.get(pk=id)
         orm_base_offer.delete()
         return BaseOfferDatabaseRepo.decode_orm_element(orm_base_offer)
@@ -76,15 +76,16 @@ class AddedDatabaseRepo(object):
         orm_addeds = AddedORM.objects.all()
         return AddedDatabaseRepo.decode_orm_all(orm_addeds)
 
-    def get_element(self, id):
+    def get_element(self, id:int):
         orm_added = AddedORM.objects.get(pk=id)
         return AddedDatabaseRepo.decode_orm_element(orm_added)
 
-    def create(self, name, available, price):
-        orm_added = AddedORM(name, available, price).save()
+    def create(self, name:str, price:int):
+        orm_added = AddedORM(name, price)
+        orm_added.save()
         return AddedDatabaseRepo.decode_orm_element(orm_added)
 
-    def update(self, by_id, id, name, available, price):
+    def update(self, by_id:int, id:int, name:int, available:bool, price:int):
         orm_added = AddedORM.objects.get(pk=by_id)
         orm_added.id = id
         orm_added.name = name
@@ -93,7 +94,7 @@ class AddedDatabaseRepo(object):
         orm_added.save()
         return AddedDatabaseRepo.decode_orm_element(orm_added)
 
-    def delete(self, id):
+    def delete(self, id:int):
         orm_added = AddedORM.objects.get(pk=id)
         orm_added.delete()
         return AddedDatabaseRepo.decode_orm_element(orm_added)
@@ -116,21 +117,21 @@ class RequestedOfferDatabaseRepo(object):
         orm_requested_offers = RequestedOfferORM.objects.all()
         return RequestedOfferDatabaseRepo.decode_orm_all(orm_requested_offers)
 
-    def get_element(self, id):
+    def get_element(self, id:int):
         orm_requested_offer = RequestedOfferORM.objects.get(pk=id)
         return RequestedOfferDatabaseRepo.decode_orm_element(orm_requested_offer)
 
-    def create(self, base_offer, addeds):
+    def create(self, base_offer:BaseOffer, addeds:list):
         base_offer_orm = BaseOfferORM.objects.get(pk=base_offer.id)
         orm_requested_offer = RequestedOfferORM(base_offer=base_offer_orm)
         orm_requested_offer.save()
         for element in addeds:
             added = AddedORM.objects.get(pk=element.id)
             orm_requested_offer.addeds.add(added)
-        orm_requested_offer.save()       
+        orm_requested_offer.save()
         return RequestedOfferDatabaseRepo.decode_orm_element(orm_requested_offer)
 
-    def update(self, by_id, id, base_offer, addeds):
+    def update(self, by_id:int, id:int, base_offer:BaseOffer, addeds:list):
         orm_requested_offer = RequestedOfferORM.objects.get(pk=by_id)
         orm_requested_offer.id = id
         orm_requested_offer.base_offer = base_offer
@@ -138,7 +139,7 @@ class RequestedOfferDatabaseRepo(object):
         orm_requested_offer.save()
         return RequestedOfferDatabaseRepo.decode_orm_element(orm_requested_offer)
 
-    def delete(self, id):
+    def delete(self, id:int):
         orm_requested_offer = RequestedOfferORM.objects.get(pk=id)
         orm_requested_offer.delete()
         return RequestedOfferDatabaseRepo.decode_orm_element(orm_requested_offer)
@@ -166,24 +167,31 @@ class OrderDatabaseRepo(object):
         orm_orders = OrderORM.objects.all()
         return OrderDatabaseRepo.decode_all(orm_orders)
 
-    def get_element(self, id):
+    def get_element(self, id:int):
         orm_order = OrderORM.objects.get(pk=id)
         return OrderDatabaseRepo.decode_element(orm_order)
 
-    def create(self, requested_offer, amount, order_list):
+    def create(self, requested_offer:RequestedOffer, amount:int, order_list:OrderList):
         orm_requested_offer = RequestedOfferORM.objects.get(pk=requested_offer.id)
         orm_order_list = OrderListORM.objects.get(pk=order_list.id)
-        orm_order = OrderORM(requested_offer=orm_requested_offer,
+        if len(OrderORM.objects.filter(requested_offer=orm_requested_offer, amount = amount, order_list=orm_order_list)) > 0:
+            orm_order = OrderORM(requested_offer=orm_requested_offer,
                           amount=amount, order_list=orm_order_list)
-        orm_order.save()
+            orm_order.save()
         return OrderDatabaseRepo.decode_orm_element(orm_order)
 
-    def update(self, by_id, requested_offer, amount, order_list):
+    def update(self, by_id:int, id:int, requested_offer:RequestedOffer, amount:int, order_list:Order_List):
         orm_order = OrderORM.objects.get(pk=by_id)
+        orm_order.id = id
         orm_order.requested_offer = requested_offer
         orm_order.amount = amount
         orm_order.order_list = order_list
         orm_order.save()
+        return OrderDatabaseRepo.decode_orm_element(orm_order)
+        
+    def delete(self, id:int):
+        orm_order = OrderORM.objects.get(pk=id)
+        orm_order.delete()
         return OrderDatabaseRepo.decode_orm_element(orm_order)
 
     @staticmethod
@@ -210,17 +218,18 @@ class ClientDatabaseRepo(object):
         orm_clients = ClientORM.objects.all()
         return ClientDatabaseRepo.decode_all(orm_clients)
 
-    def get_element(self, id):
+    def get_element(self, id:int):
         orm_client = ClientORM.objects.get(pk=id)
         return ClientDatabaseRepo.decode_orm_element(orm_client)
 
-    def create(self, id, name, address):
+    def create(self, ci:str, name:str, address:str):
         orm_client = ClientORM(
-            ci=id, name=name, address=address)
-        orm_client.save()
+            ci=ci, name=name, address=address)
+        if orm_client.DoesNotExist:
+            orm_client.save()
         return ClientDatabaseRepo.decode_orm_element(orm_client)
 
-    def update(self, by_id, ci, name, address):
+    def update(self, by_id:str, ci:str, name:str, address:str):
         orm_client = ClientORM.objects.get(pk=by_id)
         orm_client.ci = ci
         orm_client.name = name
@@ -228,7 +237,7 @@ class ClientDatabaseRepo(object):
         orm_client.save()
         return ClientDatabaseRepo.decode_orm_element(orm_client)
 
-    def delete(self, id):
+    def delete(self, id:str):
         orm_client = ClientORM.objects.get(pk=id)
         orm_client.delete()
         return ClientDatabaseRepo.decode_orm_element(orm_client)
@@ -252,26 +261,31 @@ class OrderListDatabaseRepo(object):
         orm_order_lists = OrderListORM.objects.all()
         return OrderListDatabaseRepo.decode_orm_all(orm_order_lists)
 
-    def get_element(self, id):
+    def get_element(self, id:str):
         orm_order_list = OrderListORM.objects.get(pk=id)
         return OrderListDatabaseRepo.decode_orm_element(orm_order_list)
 
-    def create(self, id, client, date):
+    def create(self, id:str, client:Client, date:str):
         client_orm = ClientORM.objects.get(pk=client.ci)
         orm_order_list = OrderListORM(id=id, date=date, client=client_orm)
         orm_order_list.save()
         return OrderListDatabaseRepo.decode_orm_element(orm_order_list)
 
-    def update(self, by_id, id, client, date, state_order):
+    def update(self, by_id:str, id:str, client:Client, date:str):
         orm_order_list = OrderListORM.objects.get(pk=by_id)
         orm_order_list.id = id
         orm_order_list.client = client
         orm_order_list.date = date
-        orm_order_list.state_order = state_order
         orm_order_list.save()
         return OrderListDatabaseRepo.decode_orm_element(orm_order_list)
-
-    def delete(self, id):
+        
+    def update_state(self, by_id:str, state:str):
+        orm_order_list = OrderListORM.objects.get(pk=by_id)
+        orm_order_list.state_order = state
+        orm_order_list.save()
+        return OrderListDatabaseRepo.decode_orm_element(orm_order_list)
+        
+    def delete(self, id:str):
         orm_order_list = OrderListORM.objects.get(pk=id)
         orm_order_list.delete()
         return OrderListDatabaseRepo.decode_orm_element(orm_order_list)

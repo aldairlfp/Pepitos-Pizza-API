@@ -1,8 +1,10 @@
-class ManageGroupsInteractor(object):
-    def __init__(self, group_repo) -> None:
-        self._group_repo = group_repo
+from ..unit_repositories import GroupRepo
 
-    def set_params(self, by_id=None, id=None, name=None, users=None, permissions=None):
+class ManageGroupsInteractor(object):
+    def __init__(self, group_repo: GroupRepo) -> None:
+        self._group_repo:GroupRepo = group_repo
+
+    def set_params(self, by_id:int=None, id:int=None, name:str=None, users:list=None, permissions:list=None):
         self._by_id = by_id
         self._id = id
         self._name = name
