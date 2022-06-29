@@ -99,10 +99,10 @@ class BaseOfferDetailView(object):
             body = {'error': e.args[0]}
             status = 400
             return body, status
-        # except Exception as e:
-        #     body = {'error': e.args[0]}
-        #     status = 500
-        #     return body, status
+        except Exception as e:
+            body = {'error': e.args[0]}
+            status = 500
+            return body, status
 
     def delete(self, by_id):
         try:
@@ -211,10 +211,6 @@ class AddedDetailView(object):
             self._manage_offers_interactor.set_params_added(by_id=id)
             self._manage_offers_interactor.delete_added()
             return None, 204
-        except EntityAlreadyExist as e:
-            body = {'error': e.args[0]}
-            status = 400
-            return body, status
         except Exception as e:
             body = {'error': e.args[0]}
             status = 500

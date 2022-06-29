@@ -17,7 +17,7 @@ class BaseOffer(models.Model):
     available = models.BooleanField(default=True)
     addeds = models.ManyToManyField('Added')
     price = models.PositiveSmallIntegerField()
-    url = models.URLField(max_length=200, blank=True)
+    url = models.URLField(max_length=1000, blank=True)
     
     def available_addeds(self):
         return self.addeds.filter(available=True)

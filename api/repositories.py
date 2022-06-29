@@ -66,7 +66,6 @@ class BaseOfferDatabaseRepo(object):
     def delete(self, id:int):
         orm_base_offer = BaseOfferORM.objects.get(pk=id)
         orm_base_offer.delete()
-        return BaseOfferDatabaseRepo.decode_orm_element(orm_base_offer)
 
     @staticmethod
     def decode_orm_all(orm_base_offers):
@@ -113,7 +112,6 @@ class AddedDatabaseRepo(object):
     def delete(self, id:int):
         orm_added = AddedORM.objects.get(pk=id)
         orm_added.delete()
-        return AddedDatabaseRepo.decode_orm_element(orm_added)
 
     @staticmethod
     def decode_orm_all(orm_addeds):
@@ -158,7 +156,6 @@ class RequestedOfferDatabaseRepo(object):
     def delete(self, id:int):
         orm_requested_offer = RequestedOfferORM.objects.get(pk=id)
         orm_requested_offer.delete()
-        return RequestedOfferDatabaseRepo.decode_orm_element(orm_requested_offer)
 
     @staticmethod
     def decode_orm_all(orm_requested_offers):
@@ -207,7 +204,6 @@ class OrderDatabaseRepo(object):
     def delete(self, id:int):
         orm_order = OrderORM.objects.get(pk=id)
         orm_order.delete()
-        return OrderDatabaseRepo.decode_orm_element(orm_order)
 
     @staticmethod
     def decode_orm_all(orm_orders):
@@ -253,7 +249,6 @@ class ClientDatabaseRepo(object):
     def delete(self, id:str):
         orm_client = ClientORM.objects.get(pk=id)
         orm_client.delete()
-        return ClientDatabaseRepo.decode_orm_element(orm_client)
 
     @staticmethod
     def decode_orm_all(orm_clients):
@@ -303,7 +298,6 @@ class OrderListDatabaseRepo(object):
     def delete(self, id:str):
         orm_order_list = OrderListORM.objects.get(pk=id)
         orm_order_list.delete()
-        return OrderListDatabaseRepo.decode_orm_element(orm_order_list)
 
     @staticmethod
     def decode_orm_all(orm_order_lists):
@@ -346,7 +340,6 @@ class UserDatabaseRepo(object):
     def delete(self, id:int):
         orm_user = UserORM.objects.get(pk=id)
         orm_user.delete()
-        return UserDatabaseRepo.decode_orm_element(orm_user)
 
     @staticmethod
     def decode_orm_all(orm_users):
@@ -385,7 +378,6 @@ class GroupDatabaseRepo(object):
     def delete(self, id:int):
         orm_group = GroupORM.objects.get(pk=id)
         orm_group.delete()
-        return GroupDatabaseRepo.decode_orm_element(orm_group)
 
     @staticmethod
     def decode_orm_all(orm_groups):
