@@ -56,7 +56,7 @@ class BaseOfferDatabaseRepo(object):
         
         orm_base_offer.save()
         for element in addeds:
-            added = AddedORM.objects.get(pk=element)
+            added = AddedORM.objects.get(pk=element.id)
             orm_base_offer.addeds.add(added)
         orm_base_offer.save()
         

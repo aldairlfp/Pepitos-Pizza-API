@@ -99,10 +99,10 @@ class BaseOfferDetailView(object):
             body = {'error': e.args[0]}
             status = 400
             return body, status
-        except Exception as e:
-            body = {'error': e.args[0]}
-            status = 500
-            return body, status
+        # except Exception as e:
+        #     body = {'error': e.args[0]}
+        #     status = 500
+        #     return body, status
 
     def delete(self, by_id):
         try:
