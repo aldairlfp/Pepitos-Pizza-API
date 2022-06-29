@@ -115,7 +115,7 @@ class AddedView(object):
 
     def get(self, *args, **kwargs):
         addeds = self._manage_offers_interactor.get_all_addeds()
-        body = BaseOfferSerializer.serialize(addeds, many=True)
+        body = AddedSerializer.serialize(addeds, many=True)
         status = 200
         return body, status
 
