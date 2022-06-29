@@ -91,7 +91,9 @@ class BaseOfferDetailView(object):
             addeds = base_offer.addeds
             url = base_offer.url
             
-            addeds_list = addeds.map(lambda x: x.id)
+            addeds_list = []
+            for i in addeds:
+                addeds_list.append(i.id)
             
             if ('id' in req and req[id] == base_offer.id) or ('name' in req and req['name'] == base_offer.name):
                 raise EntityAlreadyExist('Base offer already exist')
