@@ -1,17 +1,14 @@
-from api.models import OrderList
-
-
 from .requested_offer import RequestedOffer
+from .order_list import Order_List
 class Order(object):
-    def __init__(self, id:int, requested_offer: RequestedOffer, amount: int, order_list) -> None:
+    def __init__(self, id:int, requested_offer: RequestedOffer, amount: int) -> None:
         self._id = id
         self._requested_offer = requested_offer
         self._amount = amount
-        self._order_list = order_list
 
     @property
     def id(self):
-        return self.id
+        return self._id
         
     @property
     def requested_offer(self):
@@ -20,7 +17,3 @@ class Order(object):
     @property
     def amount(self):
         return self._amount
-        
-    @property
-    def order_list(self):
-        return self._order_list

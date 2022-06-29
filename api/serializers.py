@@ -45,7 +45,7 @@ class RequestedOfferSerializer(object):
         return {
             'id': offer.id,
             'base_offer': BaseOfferSerializer.serialize(offer.base_offer),
-            'addeds': AddedSerializer.serialize(offer.addeds.all(), many=True),
+            'addeds': AddedSerializer.serialize(offer.addeds, many=True),
         }
 
 class ClientSerializer(object):

@@ -1,3 +1,4 @@
+from api.models import BaseOffer
 from .serializers import *
 from .exception import EntityDoesNotExist, OfferAlreadyExist
 
@@ -32,9 +33,10 @@ class BaseOfferView(object):
 
             self._manage_offers_interactor.set_params_base_offer(
                 name=name, price=price, addeds=addeds)
-            self._manage_offers_interactor.create_base_offer()
+            base_offer = self._manage_offers_interactor.create_base_offer()
+            body = BaseOfferSerializer.serialize(base_offer)
             status = 201
-            return None, status
+            return body, status
         except OfferAlreadyExist as e:
             body = {'error': e.args[0]}
             status = 400
@@ -49,15 +51,14 @@ class BaseOfferDetailView(object):
     def __init__(self, manage_offers_interactor) -> None:
         self._manage_offers_interactor = manage_offers_interactor
 
-    def get(self, *args, **kwargs):
-        self._manage_offers_interactor.set_params_base_offer(
-            by_id=kwargs['id'])
+    def get(self, id):
+        self._manage_offers_interactor.set_params_base_offer(id)
         base_offer = self._manage_offers_interactor.get_element_base_offer()
         body = BaseOfferSerializer.serialize(base_offer)
         status = 200
         return body, status
 
-    def put(self, by_id, request_body):
+    def put(self, req, by_id):
         try:
             self._manage_offers_interactor.set_params_base_offer(by_id)
             base_offer = self._manage_offers_interactor.get_element_base_offer()
@@ -66,22 +67,23 @@ class BaseOfferDetailView(object):
             available = base_offer.available
             price = base_offer.price
             addeds = base_offer.addeds
-            if request_body['id'] != None:
-                id = request_body['id']
-            if request_body['name'] != None:
-                name = request_body['name']
-            if request_body['available'] != None:
-                available = request_body['available']
-            if request_body['price'] != None:
-                price = request_body['price']
-            if request_body['addeds'] != None:
-                addeds = request_body['addeds']
+            if 'id' in req:
+                id = req['id']
+            if 'name' in req:
+                name = req['name']
+            if 'available' in req:
+                available = req['available']
+            if 'price' in req:
+                price = req['price']
+            if 'addeds' in req:
+                addeds = req['addeds']
 
             self._manage_offers_interactor.set_params_base_offer(
                 by_id=by_id, id=id, name=name, available=available, price=price, addeds=addeds)
-            self._manage_offers_interactor.update_base_offer()
+            base_offer = self._manage_offers_interactor.update_base_offer()
+            body = BaseOfferSerializer.serialize(base_offer)
             status = 200
-            return None, status
+            return body, status
         except EntityDoesNotExist:
             body = {'error': e.args[0]}
             status = 400
@@ -94,8 +96,9 @@ class BaseOfferDetailView(object):
     def delete(self, by_id):
         try:
             self._manage_offers_interactor.set_params_base_offer(by_id=by_id)
-            self._manage_offers_interactor.delete_base_offer()
-            return None, 204
+            base_offer = self._manage_offers_interactor.delete_base_offer()
+            body = BaseOfferSerializer.serialize(base_offer)
+            return body, 204
         except EntityDoesNotExist as e:
             body = {'error': e.args[0]}
             status = 400

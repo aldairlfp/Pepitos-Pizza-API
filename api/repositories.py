@@ -50,7 +50,9 @@ class BaseOfferDatabaseRepo(object):
         orm_base_offer.name = name
         orm_base_offer.price = price
         orm_base_offer.available = available
-        orm_base_offer.addeds = addeds
+        for element in addeds:
+            added = AddedORM.objects.get(pk=element)
+            orm_base_offer.addeds.add(added)
         orm_base_offer.save()
         return BaseOfferDatabaseRepo.decode_orm_element(orm_base_offer)
 
@@ -209,10 +211,8 @@ class OrderDatabaseRepo(object):
     def decode_orm_element(orm_order):
         requested_offer = RequestedOfferDatabaseRepo.decode_orm_element(
             orm_order.requested_offer)
-        order_list = OrderListDatabaseRepo.decode_orm_element(
-            orm_order.order_list)
         order = Order(orm_order.id, requested_offer=requested_offer,
-                      amount=orm_order.amount, order_list=order_list)
+                      amount=orm_order.amount)
         return order
 
 
@@ -304,5 +304,7 @@ class OrderListDatabaseRepo(object):
     @staticmethod
     def decode_orm_element(orm_order_list):
         client = ClientDatabaseRepo.decode_orm_element(orm_order_list.client)
-        orders = orm_order_list.order_set.all()
-        return Order_List(orm_order_list.id, client, orders, orm_order_list.date, orm_order_list.state_order)
+        orders = OrderDatabaseRepo.decode_orm_all(orm_order_list.order_set.all())
+        # date = OrderListORM.objects.datetimes('date', 'second')
+        date = orm_order_list.date
+        return Order_List(orm_order_list.id, client, orders, date, orm_order_list.state_order)
