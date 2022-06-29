@@ -71,6 +71,7 @@ class BaseOfferDetailView(object):
             available = base_offer.available
             price = base_offer.price
             addeds = base_offer.addeds
+            url = base_offer.url
             
             if ('id' in req and req[id] == base_offer.id) or ('name' in req and req['name'] == base_offer.name):
                 raise EntityAlreadyExist('Base offer already exist')
