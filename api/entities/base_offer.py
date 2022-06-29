@@ -4,10 +4,7 @@ class BaseOffer(object):
         self._name = name
         self._available = available
         self._price = price
-        self._addeds = []
-        for add in addeds:
-            if add.available:
-                self._addeds.append(add)
+        self._addeds = addeds
         self._url = url
 
     @property

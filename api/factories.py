@@ -1,4 +1,3 @@
-from pydoc import cli
 from .repositories import *
 from .unit_repositories import *
 from .presenters import *
@@ -222,4 +221,11 @@ class OrderListDetailViewFactory(object):
         see_my_order_interactor = SeeMyOrderInteractorFactory.get()
         update_state_interactor = UpdateOrderStateInteractorFactory.get()
         return OrderListDetailView(see_my_order_interactor, update_state_interactor)
+        
+class AvailableOffersViewFactory(object):
+
+    @staticmethod
+    def create():
+        manage_offers_interactor = ManageOffersInteractorFactory.get()
+        return AvailableOffersView(manage_offers_interactor)
         

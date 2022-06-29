@@ -1,7 +1,25 @@
+from audioop import add
 from api.models import BaseOffer
 from .serializers import *
 from .exception import EntityAlreadyExist, OfferAlreadyExist
 
+class AvailableOffersView(object):
+    def __init__(self, manage_offers_interactor) -> None:
+        self._manage_offers_interactor = manage_offers_interactor
+
+    def get(self, *args, **kwargs):
+        base_offers = self._manage_offers_interactor.get_all_base_offers()
+        base_offers_list = []
+        for i in base_offers:
+            if i.available:
+                base_offers_list.append(i)
+        for i in base_offers_list:
+            for j in i.addeds:
+                if not j.available:
+                    base_offers_list.remove(j)
+        body = BaseOfferSerializer.serialize(base_offers, many=True)
+        status = 200
+        return body, status
 
 class BaseOfferView(object):
     def __init__(self, manage_offers_interactor) -> None:
@@ -73,6 +91,8 @@ class BaseOfferDetailView(object):
             addeds = base_offer.addeds
             url = base_offer.url
             
+            addeds_list = addeds.map(lambda x: x.id)
+            
             if ('id' in req and req[id] == base_offer.id) or ('name' in req and req['name'] == base_offer.name):
                 raise EntityAlreadyExist('Base offer already exist')
             
@@ -85,12 +105,12 @@ class BaseOfferDetailView(object):
             if 'price' in req:
                 price = req['price']
             if 'addeds' in req:
-                addeds = req['addeds']
+                addeds_list = req['addeds']
             if 'url' in req:
                 url = req['url']
 
             self._manage_offers_interactor.set_params_base_offer(
-                by_id=by_id, id=id, name=name, available=available, price=price, addeds=addeds, url=url)
+                by_id=by_id, id=id, name=name, available=available, price=price, addeds=addeds_list, url=url)
             base_offer = self._manage_offers_interactor.update_base_offer()
             body = BaseOfferSerializer.serialize(base_offer)
             status = 200
