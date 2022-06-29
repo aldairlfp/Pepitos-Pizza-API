@@ -1,6 +1,3 @@
-from xml.dom import UserDataHandler
-
-from requests import request
 from .serializers import *
 from .exception import EntityDoesNotExist, OfferAlreadyExist
 
