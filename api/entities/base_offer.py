@@ -1,5 +1,5 @@
 class BaseOffer(object):
-    def __init__(self, id: int, name: str, available: bool, price: int, addeds: list):
+    def __init__(self, id: int, name: str, available: bool, price: int, addeds: list, url:str):
         self._id = id
         self._name = name
         self._available = available
@@ -8,6 +8,7 @@ class BaseOffer(object):
         for add in addeds:
             if add.available:
                 self._addeds.append(add)
+        self._url = url
 
     @property
     def id(self):
@@ -28,3 +29,7 @@ class BaseOffer(object):
     @property
     def addeds(self):
         return self._addeds
+        
+    @property
+    def url(self):
+        return self._url

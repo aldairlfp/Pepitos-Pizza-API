@@ -67,6 +67,10 @@ class BaseOfferDetailView(object):
             available = base_offer.available
             price = base_offer.price
             addeds = base_offer.addeds
+            
+            if ('id' in req and req[id] == base_offer.id) or ('name' in req and req['name'] == base_offer.name):
+                raise EntityAlreadyExist('Base offer already exist')
+            
             if 'id' in req:
                 id = req['id']
             if 'name' in req:
@@ -167,6 +171,9 @@ class AddedDetailView(object):
             name = added.name
             available = added.available
             price = added.price
+            
+            if ('id' in request_body and request_body[id] == added.id) or ('name' in request_body and request_body['name'] == added.name):
+                raise EntityAlreadyExist('Added already exist')
             
             if 'id' in request_body:
                 id = request_body['id']

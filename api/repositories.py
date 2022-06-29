@@ -34,7 +34,7 @@ class BaseOfferDatabaseRepo(object):
         orm_base_offer = BaseOfferORM.objects.get(pk=id)
         return BaseOfferDatabaseRepo.decode_orm_element(orm_base_offer)
 
-    def create(self, name:str, price:str, addeds:list):
+    def create(self, name:str, price:str, addeds:list, url:str):
         orm_base_offer = BaseOfferORM(name=name, price=price)
         if len(BaseOfferORM.objects.filter(name=orm_base_offer.name)) == 0:
             orm_base_offer.save()
@@ -52,15 +52,15 @@ class BaseOfferDatabaseRepo(object):
         orm_base_offer.name = name
         orm_base_offer.price = price
         orm_base_offer.available = available
-        if len(BaseOfferORM.objects.filter(name=orm_base_offer.name)) == 0:
-            orm_base_offer.save()
-            for element in addeds:
-                added = AddedORM.objects.get(pk=element)
-                orm_base_offer.addeds.add(added)
-            orm_base_offer.save()
-            return BaseOfferDatabaseRepo.decode_orm_element(orm_base_offer)
-        else:
-            raise EntityAlreadyExist("BaseOffer already exist")
+        
+        orm_base_offer.save()
+        for element in addeds:
+            added = AddedORM.objects.get(pk=element)
+            orm_base_offer.addeds.add(added)
+        orm_base_offer.save()
+        
+        return BaseOfferDatabaseRepo.decode_orm_element(orm_base_offer)
+        
 
     def delete(self, id:int):
         orm_base_offer = BaseOfferORM.objects.get(pk=id)
@@ -105,11 +105,9 @@ class AddedDatabaseRepo(object):
         orm_added.name = name
         orm_added.price = price
         orm_added.available = available
-        if len(AddedORM.objects.filter(name=orm_added.name)) == 0:
-            orm_added.save()
-            return AddedDatabaseRepo.decode_orm_element(orm_added)
-        else:
-            raise EntityAlreadyExist("Added already exist")
+        
+        orm_added.save()
+        return AddedDatabaseRepo.decode_orm_element(orm_added)
 
     def delete(self, id:int):
         orm_added = AddedORM.objects.get(pk=id)
