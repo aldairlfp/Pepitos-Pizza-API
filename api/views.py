@@ -24,9 +24,9 @@ class APIView_Wrapper(APIView):
         body, status = self.view_factory.create().get(*args, **kwargs)
         return HttpResponse(json.dumps(body), status=status, content_type='application/json', headers={ 'Access-Control-Allow-Origin': '*' })
 
-    def post(self, request):
+    def post(self, *args, **kwargs):
         try:
-            request_body = json.loads(request.body)
+            request_body = json.loads(args[0].body)
         except ValueError:
             body = {'error': 'The request body must be in json format.'}
             return Response(body, status=400)

@@ -1,4 +1,6 @@
 from xml.dom import UserDataHandler
+
+from requests import request
 from .serializers import *
 from .exception import EntityDoesNotExist, OfferAlreadyExist
 
@@ -13,33 +15,30 @@ class BaseOfferView(object):
         status = 200
         return body, status
 
-    def post(self, request_body):
+    def post(self, req):
         try:
-            error = {}
-            if request_body['id'] != None:
-                id = request_body['id']
+            error = []
+            if 'name' in req:
+                name = req['name']
             else:
-                error['id'] = 'id is required'
-            if request_body['name'] != None:
-                name = request_body['name']
+                error.append('name is required')
+            if 'price' in req:
+                price = req['price']
             else:
-                error['name'] = 'name is required'
-            if request_body['price'] != None:
-                price = request_body['price']
+                error.append('price is required')
+            if 'addeds' in req:
+                addeds = req['addeds']
             else:
-                error['price'] = 'price is required'
-            if request_body['addeds'] != None:
-                addeds = request_body['addeds']
-            else:
-                error['addeds'] = 'addeds is required'
-            if error != {}:
+                error.append('addeds is required')
+            if len(error) > 0:
                 raise Exception(error)
 
-            self._manage_offers_interactor.set_params_base_offer(name=name, price=price, addeds=addeds)
+            self._manage_offers_interactor.set_params_base_offer(
+                name=name, price=price, addeds=addeds)
             self._manage_offers_interactor.create_base_offer()
             status = 201
             return None, status
-        except OfferAlreadyExist:
+        except OfferAlreadyExist as e:
             body = {'error': e.args[0]}
             status = 400
             return body, status
@@ -126,7 +125,8 @@ class AddedView(object):
             name = request_body['name']
             available = request_body['available']
             price = request_body['price']
-            self._manage_offers_interactor.set_params_base_offer(name=name, available=available, price=price)
+            self._manage_offers_interactor.set_params_base_offer(
+                name=name, available=available, price=price)
             self._manage_offers_interactor.create_base_offer()
             status = 201
             return None, status
@@ -230,7 +230,7 @@ class OrderListView(object):
                 error['date'] = 'date is required'
             if error != {}:
                 raise Exception(error)
-                
+
             error.clear()
             if client_request['ci'] != None:
                 id_client = client_request['ci']
@@ -251,7 +251,8 @@ class OrderListView(object):
 
             self._client_info_interactor.set_params(client.ci)
             client = self._client_info_interactor.get_element()
-            self._make_order_interactor.set_params(client=client, date=date_request)
+            self._make_order_interactor.set_params(
+                client=client, date=date_request)
             order_list = self._make_order_interactor.create()
 
             orders = []
@@ -293,13 +294,15 @@ class OrderListView(object):
                     addeds.append(
                         self._manage_offers_interactor.get_element_added())
 
-                self._make_offer_interactor.set_params(base_offer=base_offer, addeds=addeds)
+                self._make_offer_interactor.set_params(
+                    base_offer=base_offer, addeds=addeds)
                 requested_offer = self._make_offer_interactor.create()
 
-                order = self._choosed_offer_interactor.set_params(requested_offer=requested_offer, amount=amount_order, order_list=order_list)
+                order = self._choosed_offer_interactor.set_params(
+                    requested_offer=requested_offer, amount=amount_order, order_list=order_list)
                 self._choosed_offer_interactor.create()
                 # orders.append(order)
-                
+
             status = 201
             return OrderListSerializer.serialize(order_list), status
         except OfferAlreadyExist as e:
@@ -379,7 +382,8 @@ class UserView(object):
             if error != {}:
                 raise Exception(error)
 
-            self._manage_users_interactor.set_params(username=username, password=password)
+            self._manage_users_interactor.set_params(
+                username=username, password=password)
             self._manage_users_interactor.create()
             status = 201
             return None, status

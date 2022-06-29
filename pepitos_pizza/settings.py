@@ -95,7 +95,7 @@ DATABASES = {
         # 'USER': 'xreizdliixjwmh',
         # 'PASSWORD': '4e29331c416a234bddf4bf39a6d17dc916a3e1674d09c5805910c2218f9642a1',
          'ENGINE': 'django.db.backends.sqlite3',
-         'NAME': BASE_DIR / 'db.sqlite3',
+         'NAME': BASE_DIR / 'db1.sqlite3',
     }
 }
 

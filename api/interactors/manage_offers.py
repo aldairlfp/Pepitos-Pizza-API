@@ -33,8 +33,7 @@ class ManageOffersInteractor(object):
         return self._added_repo.get_element(self._by_id_added)
 
     def create_base_offer(self):
-        return self._base_offer_repo.create(self._name_base_offer,
-                                     self._available_base_offer, self._price_base_offer,
+        return self._base_offer_repo.create(self._name_base_offer,self._price_base_offer,
                                      self._addeds_base_offer)
 
     def create_added(self):

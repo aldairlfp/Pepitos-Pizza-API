@@ -12,7 +12,7 @@ class BaseOfferSerializer(object):
                 'id': base_offer.id,
                 'name': base_offer.name,
                 'price': base_offer.price,
-                'addeds': AddedSerializer.serialize(base_offer.addeds.all(), many=True)
+                'addeds': AddedSerializer.serialize(base_offer.addeds, many=True)
             }
 
 
