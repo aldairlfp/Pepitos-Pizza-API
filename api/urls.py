@@ -15,7 +15,7 @@ urlpatterns = [
     path('added/', APIView_Wrapper.as_view(view_factory=AddedViewFactory)),
     path('added/<int:id>/', DetailAPIView_Wrapper.as_view(view_factory=AddedDetailViewFactory)),
     path('order-list/', APIView_Wrapper.as_view(view_factory=OrderListViewFactory)),
-    path('order-list/<str:id>/', APIView_Wrapper.as_view(view_factory=OrderListDetailViewFactory)),
+    path('order-list/<str:id>/', DetailAPIView_Wrapper.as_view(view_factory=OrderListDetailViewFactory)),
     # path('client'),
     # path('order'),
     # path('list/<str:pk>/'),

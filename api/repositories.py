@@ -1,3 +1,5 @@
+import datetime
+
 from django.contrib.auth.models import User, Group, Permission
 
 from django.contrib.auth.models import User, Group, Permission
@@ -179,10 +181,9 @@ class OrderDatabaseRepo(object):
     def create(self, requested_offer:RequestedOffer, amount:int, order_list:OrderList):
         orm_requested_offer = RequestedOfferORM.objects.get(pk=requested_offer.id)
         orm_order_list = OrderListORM.objects.get(pk=order_list.id)
-        if len(OrderORM.objects.filter(requested_offer=orm_requested_offer, amount = amount, order_list=orm_order_list)) > 0:
-            orm_order = OrderORM(requested_offer=orm_requested_offer,
+        orm_order = OrderORM(requested_offer=orm_requested_offer,
                           amount=amount, order_list=orm_order_list)
-            orm_order.save()
+        orm_order.save()
         return OrderDatabaseRepo.decode_orm_element(orm_order)
 
     def update(self, by_id:int, id:int, requested_offer:RequestedOffer, amount:int, order_list:Order_List):
@@ -268,8 +269,10 @@ class OrderListDatabaseRepo(object):
         orm_order_list = OrderListORM.objects.get(pk=id)
         return OrderListDatabaseRepo.decode_orm_element(orm_order_list)
 
-    def create(self, id:str, client:Client, date:str):
+    def create(self, id:str, client:Client, date:str=None):
         client_orm = ClientORM.objects.get(pk=client.ci)
+        if date is None:
+            date = datetime.datetime.now().strftime("%Y-%m-%d-%H:%M:%S") 
         orm_order_list = OrderListORM(id=id, date=date, client=client_orm)
         orm_order_list.save()
         return OrderListDatabaseRepo.decode_orm_element(orm_order_list)

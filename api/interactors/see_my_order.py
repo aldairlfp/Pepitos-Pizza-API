@@ -5,8 +5,8 @@ class SeeMyOrdersInteractor(object):
     def __init__(self, order_list_repo:OrderListRepo) -> None:
         self._order_list_repo:OrderListRepo = order_list_repo
         
-    def set_params(self, order_list_id:str):
-        self._order_list_id = order_list_id
+    def set_params(self, by_id:str):
+        self._order_list_id = by_id
         
     def validate(self):
         try:

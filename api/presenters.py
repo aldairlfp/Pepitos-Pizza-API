@@ -225,75 +225,73 @@ class OrderListView(object):
 
     def post(self, request_body):
         try:
-            error = {}
-            if request_body['client'] != None:
-                client_request = request_body['client']
+            error = []
+            if 'id' in request_body:
+                id = request_body['id']
             else:
-                error['client'] = 'client is required'
-            if request_body['orders'] != None:
-                orders_request = request_body['orders']
+                error.append('id is required')
+            if 'client' in request_body:
+                client = request_body['client']
             else:
-                error['orders'] = 'orders is required'
-            if request_body['date'] != None:
-                date_request = request_body['date']
+                error.append('client is required')
+            if 'orders'in request_body and len(request_body['orders']) > 0:
+                orders = request_body['orders']
             else:
-                error['date'] = 'date is required'
-            if error != {}:
+                error.append('orders is required')
+            if 'date' in request_body:
+                date = request_body['date']
+            else:
+                date = None
+            if len(error):
                 raise Exception(error)
 
             error.clear()
-            if client_request['ci'] != None:
-                id_client = client_request['ci']
+            if 'ci' in client:
+                ci_client = client['ci']
             else:
-                error['client.ci'] = 'ci is required'
-            if client_request['name'] != None:
-                name_client = client_request['name']
+                error.append('client.ci is required')
+            if 'name' in client:
+                name_client = client['name']
             else:
-                error['client.name'] = 'name is required'
-            if client_request['address'] != None:
-                address_client = client_request['address']
+                error.append('client.name is required')
+            if 'address' in client:
+                address_client = client['address']
             else:
-                error['client.address'] = 'address is required'
+                error.append('client.address is required')
 
-            self._client_info_interactor.set_params(
-                ci=id_client, name=name_client, address=address_client)
-            client = self._client_info_interactor.create()
-
-            self._client_info_interactor.set_params(client.ci)
-            client = self._client_info_interactor.get_element()
-            self._make_order_interactor.set_params(
-                client=client, date=date_request)
-            order_list = self._make_order_interactor.create()
-
-            orders = []
-
-            for i, element in enumerate(orders_request):
+            for i, element in enumerate(orders):
                 error.clear()
-                if element['requested_offer'] != None:
+                if 'requested_offer' in element:
                     requested_offer_order = element['requested_offer']
                 else:
-                    error['order[{}]'.format(
-                        i)] = 'requested offer is required'
-                if element['amount'] != None:
+                    error.append('order[{}].requested offer is required'.format(i))
+                if 'amount' in element:
                     amount_order = element['amount']
                 else:
-                    error['order[{}]'.format(i)] = 'amount is required'
-                if error != {}:
+                    error.append('order[{}].amount is required'.format(i))
+                if len(error):
                     raise Exception(error)
 
                 error.clear()
-                if requested_offer_order['base_offer'] != None:
+                if 'base_offer'in requested_offer_order:
                     base_offer_requested_offer = requested_offer_order['base_offer']
                 else:
-                    error['order[{}].requested_offer.base_offer'.format(
-                        i)] = 'base offer is required'
-                if requested_offer_order['addeds'] != None:
+                    error.append('order[{}].requested_offer.base_offer is required'.format(i))
+                if 'addeds' in requested_offer_order:
                     addeds_requested_offer = requested_offer_order['addeds']
                 else:
-                    error['order[{}].requested_offer.addeds'.format(
-                        i)] = 'addeds is required'
-                if error != {}:
+                    error.append('order[{}].requested_offer.addeds is required'.format(i))
+                if len(error) > 0:
                     raise Exception(error)
+                    
+                self._client_info_interactor.set_params(
+                ci=ci_client, name=name_client, address=address_client)
+                client = self._client_info_interactor.create()
+
+            
+                self._make_order_interactor.set_params(
+                    client=client, date=date)
+                order_list = self._make_order_interactor.create()
 
                 self._manage_offers_interactor.set_params_base_offer(
                     by_id=base_offer_requested_offer)
@@ -308,19 +306,18 @@ class OrderListView(object):
                     base_offer=base_offer, addeds=addeds)
                 requested_offer = self._make_offer_interactor.create()
 
-                order = self._choosed_offer_interactor.set_params(
+                self._choosed_offer_interactor.set_params(
                     requested_offer=requested_offer, amount=amount_order, order_list=order_list)
                 self._choosed_offer_interactor.create()
-                # orders.append(order)
 
             status = 201
-            return OrderListSerializer.serialize(order_list), status
+            return None, status
         except OfferAlreadyExist as e:
             body = {'error': e.args[0]}
             status = 400
             return body, status
         except Exception as e:
-            body = e.args
+            body = e.args[0]
             status = 500
             return body, status
 
@@ -330,8 +327,8 @@ class OrderListDetailView(object):
         self._see_my_order_interactor = see_my_order_interactor
         self._update_state_interactor = update_state_interactor
 
-    def get(self, *args, **kwargs):
-        self._see_my_order_interactor.set_params(kwargs['id'])
+    def get(self, id):
+        self._see_my_order_interactor.set_params(id)
         order_list = self._see_my_order_interactor.execute()
         body = OrderListSerializer.serialize(order_list)
         status = 200
@@ -341,19 +338,23 @@ class OrderListDetailView(object):
         try:
             self._see_my_order_interactor.set_params(by_id=pk)
             order_list = self._see_my_order_interactor.execute()
-
-            # id = order_list.id
-            # orders = order_list.orders
-            # client = order_list.client
-            # date = order_list.date
             state = order_list.state
-            if request_body['state'] != None:
+            
+            error=[]
+            if 'state' in request_body:
                 state = request_body['state']
-            self._update_state_interactor.set_params(by_id=pk, state=state)
+            else:
+                error.append('state is required')
+            if len(error) > 0:
+                raise Exception(error)
+                
+            self._update_state_interactor.set_params(pk, state)
             order_list = self._update_state_interactor.execute()
+            
+            body = OrderListSerializer.serialize(order_list)
             status = 200
-            return OrderListSerializer.serialize(order_list), status
-        except EntityDoesNotExist:
+            return body, status
+        except EntityDoesNotExist as e:
             body = {'error': e.args[0]}
             status = 400
             return body, status
