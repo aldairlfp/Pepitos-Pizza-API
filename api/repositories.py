@@ -35,7 +35,7 @@ class BaseOfferDatabaseRepo(object):
         return BaseOfferDatabaseRepo.decode_orm_element(orm_base_offer)
 
     def create(self, name:str, price:str, addeds:list, url:str):
-        orm_base_offer = BaseOfferORM(name=name, price=price)
+        orm_base_offer = BaseOfferORM(name=name, price=price, url=url)
         if len(BaseOfferORM.objects.filter(name=orm_base_offer.name)) == 0:
             orm_base_offer.save()
             for element in addeds:
@@ -46,12 +46,13 @@ class BaseOfferDatabaseRepo(object):
         else:
             raise EntityAlreadyExist("BaseOffer already exist")
 
-    def update(self, by_id:int, id:int, name:str, available:bool, price:str, addeds:list):
+    def update(self, by_id:int, id:int, name:str, available:bool, price:str, addeds:list, url:str):
         orm_base_offer = BaseOfferORM.objects.get(pk=by_id)
         orm_base_offer.id = id
         orm_base_offer.name = name
         orm_base_offer.price = price
         orm_base_offer.available = available
+        orm_base_offer.url = url
         
         orm_base_offer.save()
         for element in addeds:
@@ -79,7 +80,7 @@ class BaseOfferDatabaseRepo(object):
     def decode_orm_element(orm_base_offer):
         addeds = AddedDatabaseRepo.decode_orm_all(
             orm_base_offer.addeds.all())
-        return BaseOffer(orm_base_offer.id, orm_base_offer.name, orm_base_offer.available, orm_base_offer.price, addeds)
+        return BaseOffer(orm_base_offer.id, orm_base_offer.name, orm_base_offer.available, orm_base_offer.price, addeds, orm_base_offer.url)
 
 
 class AddedDatabaseRepo(object):

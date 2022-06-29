@@ -11,11 +11,11 @@ class BaseOfferRepo(object):
     def get_element(self, id:int):
         return self.__db_repo.get_element(id)
 
-    def create(self, name:str, price:int, addeds:list):
-        return self.__db_repo.create(name, price, addeds)
+    def create(self, name:str, price:int, addeds:list, url:str):
+        return self.__db_repo.create(name, price, addeds, url)
 
-    def update(self, by_id:int, id:int, name:str, available:bool, price:int, addeds:list):
-        return self.__db_repo.update(by_id, id, name, available, price, addeds)
+    def update(self, by_id:int, id:int, name:str, available:bool, price:int, addeds:list, url:str):
+        return self.__db_repo.update(by_id, id, name, available, price, addeds, url)
 
     def delete(self, by_id:int):
         return self.__db_repo.delete(by_id)

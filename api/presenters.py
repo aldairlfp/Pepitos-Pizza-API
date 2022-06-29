@@ -28,11 +28,15 @@ class BaseOfferView(object):
                 addeds = req['addeds']
             else:
                 error.append('addeds is required')
+            if 'url' in req:
+                url = req['url']
+            else:
+                error.append('url is required')
             if len(error) > 0:
                 raise Exception(error)
 
             self._manage_offers_interactor.set_params_base_offer(
-                name=name, price=price, addeds=addeds)
+                name=name, price=price, addeds=addeds, url=url)
             base_offer = self._manage_offers_interactor.create_base_offer()
             body = BaseOfferSerializer.serialize(base_offer)
             status = 201
@@ -81,9 +85,11 @@ class BaseOfferDetailView(object):
                 price = req['price']
             if 'addeds' in req:
                 addeds = req['addeds']
+            if 'url' in req:
+                url = req['url']
 
             self._manage_offers_interactor.set_params_base_offer(
-                by_id=by_id, id=id, name=name, available=available, price=price, addeds=addeds)
+                by_id=by_id, id=id, name=name, available=available, price=price, addeds=addeds, url=url)
             base_offer = self._manage_offers_interactor.update_base_offer()
             body = BaseOfferSerializer.serialize(base_offer)
             status = 200
