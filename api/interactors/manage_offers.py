@@ -42,7 +42,7 @@ class ManageOffersInteractor(object):
 
     def update_base_offer(self):
         return self._base_offer_repo.update(self._by_id_base_offer, self._id_base_offer, self._name_base_offer,
-                                     self._available_base_offer, self._price_base_offer, self._addeds_base_offer)
+                                     self._available_base_offer, self._price_base_offer, self._addeds_base_offer, self._url)
                                      
     def update_added(self):
         return self._added_repo.update(self._by_id_added, self._id_added, self._name_added, self._available_added, self._price_added)
