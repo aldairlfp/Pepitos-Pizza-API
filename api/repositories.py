@@ -86,7 +86,7 @@ class AddedDatabaseRepo(object):
         return AddedDatabaseRepo.decode_orm_element(orm_added)
 
     def create(self, name:str, price:int):
-        orm_added = AddedORM(name, price)
+        orm_added = AddedORM(name=name, price=price)
         orm_added.save()
         return AddedDatabaseRepo.decode_orm_element(orm_added)
 

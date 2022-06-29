@@ -37,7 +37,7 @@ class ManageOffersInteractor(object):
                                      self._addeds_base_offer)
 
     def create_added(self):
-        return self._added_repo.create(self._name_added, self._available_added, self._price_added)
+        return self._added_repo.create(self._name_added, self._price_added)
 
     def update_base_offer(self):
         return self._base_offer_repo.update(self._by_id_base_offer, self._id_base_offer, self._name_base_offer,

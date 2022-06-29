@@ -121,23 +121,30 @@ class AddedView(object):
 
     def post(self, request_body):
         try:
-            id = request_body['id']
-            name = request_body['name']
-            available = request_body['available']
-            price = request_body['price']
-            self._manage_offers_interactor.set_params_base_offer(
-                name=name, available=available, price=price)
-            self._manage_offers_interactor.create_base_offer()
+            error = []
+            if 'name' in request_body:
+                name = request_body['name']
+            else:
+                error.append('name is required')
+            if 'price' in request_body:
+                price = request_body['price']
+            else:
+                error.append('price is required')
+            if len(error) > 0:
+                raise Exception(error)
+            self._manage_offers_interactor.set_params_added(name=name,price=price)
+            added = self._manage_offers_interactor.create_added()
+            body = AddedSerializer.serialize(added)
             status = 201
-            return None, status
-        except OfferAlreadyExist:
+            return body, status
+        except OfferAlreadyExist as e:
             body = {'error': e.args[0]}
             status = 400
             return body, status
-        except Exception as e:
-            body = {'error': e.args[0]}
-            status = 500
-            return body, status
+        # except Exception as e:
+        #     body = {'error': e.args[0]}
+        #     status = 500
+        #     return body, status
 
 
 class AddedDetailView(object):
