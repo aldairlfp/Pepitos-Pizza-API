@@ -141,46 +141,49 @@ class AddedView(object):
             body = {'error': e.args[0]}
             status = 400
             return body, status
-        # except Exception as e:
-        #     body = {'error': e.args[0]}
-        #     status = 500
-        #     return body, status
+        except Exception as e:
+            body = {'error': e.args[0]}
+            status = 500
+            return body, status
 
 
 class AddedDetailView(object):
     def __init__(self, manage_offers_interactor) -> None:
         self._manage_offers_interactor = manage_offers_interactor
 
-    def get(self, *args, **kwargs):
-        self._manage_offers_interactor.set_params_added(by_id=kwargs['id'])
+    def get(self, id):
+        self._manage_offers_interactor.set_params_added(id)
         added = self._manage_offers_interactor.get_element_added()
         body = AddedSerializer.serialize(added)
         status = 200
         return body, status
 
-    def put(self, by_id, request_body):
+    def put(self, request_body, by_id):
         try:
             self._manage_offers_interactor.set_params_added(by_id)
             added = self._manage_offers_interactor.get_element_added()
+            
             id = added.id
             name = added.name
             available = added.available
             price = added.price
-            addeds = added.addeds
-            if request_body['id'] != None:
+            
+            if 'id' in request_body:
                 id = request_body['id']
-            if request_body['name'] != None:
+            if 'name' in request_body:
                 name = request_body['name']
-            if request_body['available'] != None:
+            if 'available' in request_body:
                 available = request_body['available']
-            if request_body['price'] != None:
+            if 'price' in request_body:
                 price = request_body['price']
+                
             self._manage_offers_interactor.set_params_added(
-                by_id=by_id, id=id, name=name, available=available, price=price, addeds=addeds)
-            self._manage_offers_interactor.update_added()
+                by_id=by_id, id=id, name=name, available=available, price=price)
+            added = self._manage_offers_interactor.update_added()
+            body = AddedSerializer.serialize(added)
             status = 200
-            return None, status
-        except EntityDoesNotExist:
+            return body, status
+        except EntityDoesNotExist as e:
             body = {'error': e.args[0]}
             status = 400
             return body, status
@@ -189,9 +192,9 @@ class AddedDetailView(object):
             status = 500
             return body, status
 
-    def delete(self, by_id):
+    def delete(self, id):
         try:
-            self._manage_offers_interactor.set_params_added(by_id=by_id)
+            self._manage_offers_interactor.set_params_added(by_id=id)
             self._manage_offers_interactor.delete_added()
             return None, 204
         except EntityDoesNotExist as e:
