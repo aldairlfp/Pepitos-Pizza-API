@@ -1,0 +1,11 @@
+{
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "driver": "SQLite",
+            "name": "Pepitos Pizza",
+            "database": "${workspaceFolder:pepitos-pizza}/pizzeria.sqlite3"
+        }
+    ],
+    "sqltools.useNodeRuntime": true
+}
