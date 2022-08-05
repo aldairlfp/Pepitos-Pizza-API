@@ -1,6 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { type } from 'os';
-import { Added } from 'src/added/entities/added.entity';
+import { IsBoolean } from 'class-validator';
 import { Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()

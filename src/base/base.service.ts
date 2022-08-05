@@ -8,21 +8,18 @@ import { BaseRepository } from './repositories/base.repository';
 export class BaseService {
   constructor(private baseRepository: BaseRepository) {}
 
-  private bases: Base[] = [
-    { id: 1, name: 'Base grande', price: 120, available: true },
-  ];
-
   async create(createBaseDto: CreateBaseDto): Promise<Base> {
     const newBase = { ...createBaseDto };
 
     const base = new Base();
+
     base.name = newBase.name;
     base.price = newBase.price;
     base.available = newBase.available;
 
-    const savedBase = await this.baseRepository.create(base);
+    const createdBase = await this.baseRepository.create(base);
 
-    return savedBase;
+    return createdBase;
   }
 
   async findAll(): Promise<Base[]> {
@@ -33,11 +30,22 @@ export class BaseService {
     return await this.baseRepository.findOne(id);
   }
 
-  update(id: number, updateBaseDto: UpdateBaseDto): Base {
-    return this.bases[0];
+  async update(id: number, updateBaseDto: UpdateBaseDto): Promise<Base> {
+    const oldBase = await this.findOne(id)
+    const newBase = new Base()
+
+    newBase.id = updateBaseDto.id ? updateBaseDto.id : oldBase.id
+    newBase.name = updateBaseDto.name ? updateBaseDto.name : oldBase.name
+    newBase.available = updateBaseDto.available ? updateBaseDto.available : oldBase.available
+    newBase.price = updateBaseDto.price ? updateBaseDto.price : oldBase.price
+
+    const updatedBase = await this.baseRepository.update(oldBase, newBase)
+
+    return updatedBase
   }
 
-  remove(id: number): Base {
-    return this.bases[0];
+  async remove(id: number): Promise<Base> {
+    const base = await this.baseRepository.remove(id)
+    return base
   }
 }

@@ -36,12 +36,12 @@ export class BaseController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateBaseDto: UpdateBaseDto): Base {
+  update(@Param('id') id: string, @Body() updateBaseDto: UpdateBaseDto): Promise<Base> {
     return this.baseService.update(+id, updateBaseDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string): Base {
+  remove(@Param('id') id: string): Promise<Base> {
     return this.baseService.remove(+id);
   }
 }
