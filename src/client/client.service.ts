@@ -11,10 +11,6 @@ export class ClientService {
     },
     {
       id: 2,
-      name: 'Glenda',
-    },
-    {
-      id: 3,
       name: 'Yero',
     },
   ];
